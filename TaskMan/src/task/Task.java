@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 /*
- * TODO: more documentation, unit tests for consistency checks
+ * TODO: more documentation, unit tests for consistency checks, loop checking in dependency graph
  */
 
 public class Task {
@@ -20,8 +20,7 @@ public class Task {
     private Status status;
 
     public Task(String description, User user, int estimatedDuration, double acceptableDeviation,
-	    List<Task> dependencyTasks, Task alternateTask, TimeSpan timeSpan, Status status)
-	    throws Exception {
+	    List<Task> dependencyTasks, Task alternateTask) throws Exception {
 	checkDescription(description);
 	checkUser(user);
 	checkDuration(estimatedDuration);
@@ -34,8 +33,8 @@ public class Task {
 	this.acceptableDeviation = acceptableDeviation;
 	this.dependencyTasks = dependencyTasks;
 	this.alternateTask = alternateTask;
-	this.timeSpan = timeSpan;
-	this.status = status;
+	this.timeSpan = null;
+	this.status = new Ongoing();
     }
 
     public String getDescription() {
