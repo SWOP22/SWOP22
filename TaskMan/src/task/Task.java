@@ -102,7 +102,7 @@ public class Task {
     }
 
     // !!!
-    // A project needs to check that its tasks' alternatives relate to tasks of
+    // A project needs to check that its tasks' alternates relate to tasks of
     // the same project, tasks do not have the information to check this themselves.
     // !!!
     public void setAlternateTask(Task alternateTask) throws Exception {
@@ -169,7 +169,7 @@ public class Task {
 	}
 	List<Task> notAllowed = new ArrayList<Task>();
 	notAllowed.add(this);
-	loopCheck(dependencyTasks, notAllowed);
+	dependencyLoopCheck(dependencyTasks, notAllowed);
     }
 
     private void checkDependencyTask(Task dependencyTask) throws Exception {
@@ -183,24 +183,41 @@ public class Task {
 	tasks.add(dependencyTask);
 	List<Task> notAllowed = new ArrayList<Task>();
 	notAllowed.add(this);
-	loopCheck(tasks, notAllowed);
+	dependencyLoopCheck(tasks, notAllowed);
     }
 
-    private void loopCheck(List<Task> tasks, List<Task> notAllowed) throws Exception {
+    private void dependencyLoopCheck(List<Task> tasks, List<Task> notAllowed) throws Exception {
 	for (Task task : tasks) {
 	    if (notAllowed.contains(task)) {
 		throw new Exception("The given dependencies caused a loop in the dependency graph!");
 	    }
 	    List<Task> notAllowedNew = new ArrayList<Task>(notAllowed);
 	    notAllowedNew.add(task);
-	    loopCheck(task.getDependencyTasks(), notAllowedNew);
+	    dependencyLoopCheck(task.getDependencyTasks(), notAllowedNew);
 	}
     }
 
     private void checkAlternateTask(Task alternateTask) throws Exception {
-	// An alternate task can be null, but can not be itself
-	if (alternateTask != null && this == alternateTask) {
-	    throw new Exception("A task can not be an alternative for itself!");
+	// If the alternate task is not null, check for loop
+	if (alternateTask != null) {
+	    // An alternate task can not be itself
+	    if (this == alternateTask) {
+		throw new Exception("A task can not be an alternate for itself!");
+	    }
+	    // Loop check
+	    List<Task> notAllowed = new ArrayList<Task>();
+	    notAllowed.add(this);
+	    alternateTaskLoopCheck(alternateTask, notAllowed);
+	}
+    }
+
+    private void alternateTaskLoopCheck(Task task, List<Task> notAllowed) throws Exception {
+	if (task != null) {
+	    if (notAllowed.contains(task)) {
+		throw new Exception("The given alternate caused a loop!");
+	    }
+	    notAllowed.add(task);
+	    alternateTaskLoopCheck(task.getAlternateTask(), notAllowed);
 	}
     }
 
