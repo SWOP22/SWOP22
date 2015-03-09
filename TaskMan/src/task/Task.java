@@ -1,10 +1,11 @@
 package task;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /*
- * TODO: more documentation, unit tests for consistency checks, loop checking in dependency graph
+ * TODO: more documentation, unit tests for consistency checks
  */
 
 public class Task {
@@ -118,8 +119,12 @@ public class Task {
 	this.timeSpan = timeSpan;
     }
 
-    public Status getStatus() {
-	return status;
+    public boolean ongoing() {
+	return status.ongoing();
+    }
+
+    public boolean finished() {
+	return status.finished();
     }
 
     public void setStatus(Status status) throws Exception {
@@ -155,41 +160,71 @@ public class Task {
 
     private void checkDependencyTasks(List<Task> dependencyTasks) throws Exception {
 	for (Task task : dependencyTasks) {
+	    if (task == null) {
+		throw new Exception("Can not add null to the list of dependency tasks!");
+	    }
 	    if (this == task) {
 		throw new Exception("A task can not depend on itself!");
 	    }
 	}
+	List<Task> notAllowed = new ArrayList<Task>();
+	notAllowed.add(this);
+	loopCheck(dependencyTasks, notAllowed);
     }
 
     private void checkDependencyTask(Task dependencyTask) throws Exception {
+	if (dependencyTask == null) {
+	    throw new Exception("Can not add null to the list of dependency tasks!");
+	}
 	if (this == dependencyTask) {
 	    throw new Exception("A task can not depend on itself!");
+	}
+	List<Task> tasks = new ArrayList<Task>();
+	tasks.add(dependencyTask);
+	List<Task> notAllowed = new ArrayList<Task>();
+	notAllowed.add(this);
+	loopCheck(tasks, notAllowed);
+    }
+
+    private void loopCheck(List<Task> tasks, List<Task> notAllowed) throws Exception {
+	for (Task task : tasks) {
+	    if (notAllowed.contains(task)) {
+		throw new Exception("The given dependencies caused a loop in the dependency graph!");
+	    }
+	    List<Task> notAllowedNew = new ArrayList<Task>(notAllowed);
+	    notAllowedNew.add(task);
+	    loopCheck(task.getDependencyTasks(), notAllowedNew);
 	}
     }
 
     private void checkAlternateTask(Task alternateTask) throws Exception {
-	if (this == alternateTask) {
+	// An alternate task can be null, but can not be itself
+	if (alternateTask != null && this == alternateTask) {
 	    throw new Exception("A task can not be an alternative for itself!");
 	}
     }
 
     private void checkTimeSpan(TimeSpan timeSpan) throws Exception {
 	// The time span can only be changed if the task is currently ongoing
-	if (!status.ongoing()) {
+	if (!ongoing()) {
 	    throw new Exception("The time span of finished and failed tasks can not be changed!");
 	}
 	// Check valid time span
-	if (timeSpan.getStartTime() <= timeSpan.getEndTime()) {
+	if (timeSpan != null && timeSpan.getStartTime() <= timeSpan.getEndTime()) {
 	    throw new Exception("The start time has to be before or equal to the end time!");
 	}
     }
 
     private void checkStatus(Status status) throws Exception {
+	// The status can not be null
+	if (status == null) {
+	    throw new Exception("A task must have a status!");
+	}
 	// The status of finished and failed tasks can not be changed
-	if (!this.status.ongoing()) {
+	if (!ongoing()) {
 	    throw new Exception("The status of finished and failed tasks can not be changed!");
 	}
-	// The status can only be set to finished, if the time span is set
+	// The status can only be set to finished if the time span is set
 	if (status.finished() && this.timeSpan == null) {
 	    throw new Exception("A task can only be finished if it has a time span!");
 	}
