@@ -100,10 +100,10 @@ public class MainUI extends JFrame {
 		scrollPane.setBounds(150, 30, 300, 190);
 		
 		JLabel lblProjects = new JLabel("Projects");
-		lblProjects.setBounds(150, 5, 39, 14);
+		lblProjects.setBounds(150, 5, 73, 14);
 		
 		JLabel lblTasks = new JLabel("Tasks");
-		lblTasks.setBounds(475, 5, 27, 14);
+		lblTasks.setBounds(475, 5, 83, 14);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(475, 30, 300, 190);
@@ -112,9 +112,9 @@ public class MainUI extends JFrame {
 
 		btnShowTasks.setBounds(15, 99, 117, 23);
 		
-		btnShowTaskDetails = new JButton("show Task Details");
+		btnShowTaskDetails = new JButton("<html>show Task<br />details</html>");
 
-		btnShowTaskDetails.setBounds(15, 140, 117, 23);
+		btnShowTaskDetails.setBounds(15, 140, 117, 37);
 		
 		taskListModel = new DefaultListModel<Task>();
 		taskList = new JList<Task>(taskListModel);
