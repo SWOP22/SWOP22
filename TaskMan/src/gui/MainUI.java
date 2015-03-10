@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -9,21 +8,28 @@ import javax.swing.border.EmptyBorder;
 
 import main.FrontController;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.LayoutStyle.ComponentPlacement;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import data.InvalidProjectDataException;
+import data.InvalidTaskDataException;
+import data.InvalidTaskUpdateDataException;
+import data.ProjectData;
+import data.TaskData;
+import data.TaskUpdateData;
 import project.Project;
 import task.Task;
+import time.InvalidTimeStampException;
+import time.TimeStamp;
 
 public class MainUI extends JFrame {
 
@@ -41,6 +47,11 @@ public class MainUI extends JFrame {
 	private JButton btnShowTasks;
 	private JButton btnShowTaskDetails;
 	private JTextField textField;
+	private DefaultListModel<Project> projectListModel;
+	private JList<Project> projectList;
+	private DefaultListModel<Task> taskListModel;
+	private JList<Task> taskList;
+	private JButton btnAdvanceTime;
 	/**
 	 * Launch the application.
 	 */
@@ -98,15 +109,19 @@ public class MainUI extends JFrame {
 		scrollPane_1.setBounds(475, 30, 300, 190);
 		
 		btnShowTasks = new JButton("show Tasks");
+
 		btnShowTasks.setBounds(15, 99, 117, 23);
 		
 		btnShowTaskDetails = new JButton("show Task Details");
+
 		btnShowTaskDetails.setBounds(15, 140, 117, 23);
 		
-		JList<Task> taskList = new JList<Task>();
+		taskListModel = new DefaultListModel<Task>();
+		taskList = new JList<Task>(taskListModel);
 		scrollPane_1.setViewportView(taskList);
 		
-		JList<Project> projectList = new JList<Project>();
+		projectListModel = new DefaultListModel<Project>();
+		projectList = new JList<Project>(projectListModel);
 		scrollPane.setViewportView(projectList);
 		contentPane.setLayout(null);
 		contentPane.add(btnShowProjects);
@@ -120,34 +135,103 @@ public class MainUI extends JFrame {
 		contentPane.add(btnCreateTask);
 		contentPane.add(btnUpdateTask);
 		
-		textField = new JTextField();
-		textField.setBounds(241, 241, 86, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		btnAdvanceTime = new JButton("advance time");
+
+		btnAdvanceTime.setBounds(15, 478, 117, 23);
+		contentPane.add(btnAdvanceTime);
+		
 	}
 	
 	public void createEvents() {
 		btnShowProjects.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				projectListModel.clear();
+				int i = 0;
+				for(Project project : fc.getProjects()){
+					projectListModel.add(i,project);
+					i++;
+				}
+			}
+		});
+		
+		btnShowTasks.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				taskListModel.clear();
+				Project project = projectList.getSelectedValue();
+				int i = 0;
+				for(Task task : project.getTasks()){
+					taskListModel.add(i,task);
+					i++;
+				}
+			}
+		});
+		
+		btnShowTaskDetails.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Task task = taskList.getSelectedValue();
+				new TaskDetailsUI(task);
 			}
 		});
 		
 		btnCreateProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				ProjectData pData = fc.getProjectData();
+				//TODO input => pdata
+				try {
+					fc.createProject(pData);
+				} catch (InvalidProjectDataException e1) {
+					JOptionPane.showMessageDialog(null, e.toString(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		
 		btnCreateTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if(projectList.getSelectedValue() != null){
+					TaskData tData = fc.getTaskData(projectList.getSelectedValue());
+					//TODO input => tdata
+					try {
+						fc.createTask(tData);
+					} catch (InvalidTaskDataException e1) {
+						JOptionPane.showMessageDialog(null, e.toString(), "Error",
+                                JOptionPane.ERROR_MESSAGE);
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Please select a project from the projects list", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		
 		btnUpdateTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				if(taskList.getSelectedValue() != null){
+					TaskUpdateData tUData = fc.getTaskUpdateData(taskList.getSelectedValue());
+					//TODO input => tudata
+					try {
+						fc.taskStatusUpdate(tUData);
+					} catch (InvalidTaskUpdateDataException e1) {
+						JOptionPane.showMessageDialog(null, e.toString(), "Error",
+                                JOptionPane.ERROR_MESSAGE);
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Please select a task from the tasks list", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		
+		btnAdvanceTime.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TimeStamp time = new TimeStamp();
+				//TODO input => timestamp
+				try {
+					fc.advanceTime(time);
+				} catch (InvalidTimeStampException e1) {
+					JOptionPane.showMessageDialog(null, e.toString(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 	}

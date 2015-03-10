@@ -1,6 +1,9 @@
 package project;
 
 import java.util.Date;
+import java.util.List;
+
+import task.Task;
 
 public class Project {
 	private String name;
@@ -39,5 +42,10 @@ public class Project {
 	}
 	public void setDueTime(Date dueTime) {
 		this.dueTime = dueTime;
+	}
+
+	public List<Task> getTasks() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
