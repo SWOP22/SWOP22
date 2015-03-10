@@ -1,32 +1,18 @@
 package project;
 
+import java.util.Date;
 import java.util.List;
 
-import data.ProjectData;
-import data.TaskData;
-import data.TaskUpdateData;
+import task.*;
 
 public class ProjectHandler {
-
+	public static void createProject(String name, String description, Date creationTime, Date dueTime, Status status, List<Task> allTasks) {
+		new Project(name, description, creationTime, dueTime, status, allTasks);
+	}
+	
 	public List<Project> getProjects() {
-		return null;
-		// TODO Auto-generated method stub
+		List<Project> allProjects = null;
 		
+		return allProjects;
 	}
-
-	public void createProject(ProjectData pData) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void createTask(TaskData tData) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void taskStatusUpdate(TaskUpdateData tUData) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
