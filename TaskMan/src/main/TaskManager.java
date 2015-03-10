@@ -6,6 +6,7 @@ import project.Project;
 import project.ProjectHandler;
 import time.TimeHandler;
 import time.TimeStamp;
+import data.InvalidProjectDataException;
 import data.ProjectData;
 import data.TaskData;
 import data.TaskUpdateData;
@@ -24,7 +25,7 @@ public class TaskManager {
 		return pH.getProjects();
 	}
 	
-	public void createProject(ProjectData pData) {
+	public void createProject(ProjectData pData) throws InvalidProjectDataException {
 		pH.createProject(pData);
 	}
 
