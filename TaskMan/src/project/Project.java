@@ -3,7 +3,14 @@ package project;
 import java.util.Date;
 import java.util.List;
 
-import task.*;
+import data.InvalidProjectDataException;
+import data.ProjectData;
+import data.TaskData;
+import data.TaskUpdateData;
+import task.Ongoing;
+import task.Status;
+import task.Task;
+
 
 public class Project {
 	private String name;
@@ -14,16 +21,22 @@ public class Project {
 	private List<Task> allTasks;
 	
 	
-	public Project(String name, String description, Date creationTime,
-			Date dueTime, Status status, List<Task> allTasks) {
-		this.name = name;
-		this.description = description;
-		this.creationTime = creationTime;
-		this.dueTime = dueTime;
-		this.status = status;
-		this.allTasks = allTasks;
+	public Project(ProjectData pData) throws InvalidProjectDataException {
+		String pName = pData.getName();
+		String pDescription = pData.getDescription();
+		Date pCreationTime = pData.getCreationTime();
+		Date pDueTime = pData.getDueTime();
+		
+		this.name = pName;
+		this.description = pDescription;
+		this.creationTime = pCreationTime;
+		this.dueTime = pDueTime;
+		this.status = new Ongoing();
+		this.allTasks = null;
 	}
 	
+	
+	//Getters and Setters
 	public String getName() {
 		return name;
 	}
@@ -72,24 +85,21 @@ public class Project {
 		this.allTasks = allTasks;
 	}
 	
-	//Field Checks
-	public void checkName(String name) throws Exception {
-		if(name.equals(""))
-			throw new Exception("A name cannot be empty !");
+	public boolean ongoing() {
+		return status.ongoing();
+    }
+
+    public boolean finished() {
+    	return status.finished();
+    }
+
+	public void createTask(TaskData tData) {
+		Task newTask = new Task(tData);
+		allTasks.add(newTask);
+	}
+
+	public void taskStatusUpdate(TaskUpdateData tUData) {
+		Task.setStatus(tUData);
 	}
 	
-	public void checkDescription(String description) throws Exception {
-		if(description.equals(""))
-			throw new Exception("A description cannot be empty !");
-	}
-	
-	public void checkCreationTime(Date creationTime) throws Exception {
-		if(creationTime == null)
-			throw new Exception("A project must have a creation time !");
-	}
-	
-	public void checkDueTime(Date dueTime) throws Exception {
-		if(dueTime == null)
-			throw new Exception("A project must have a due time !");
-	}
 }

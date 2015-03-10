@@ -1,18 +1,30 @@
 package project;
 
-import java.util.Date;
 import java.util.List;
 
-import task.*;
+import data.InvalidProjectDataException;
+import data.ProjectData;
+import data.TaskData;
+import data.TaskUpdateData;
 
 public class ProjectHandler {
-	public static void createProject(String name, String description, Date creationTime, Date dueTime, Status status, List<Task> allTasks) {
-		new Project(name, description, creationTime, dueTime, status, allTasks);
+	private Project project;
+	
+	public void createProject(ProjectData pData) throws InvalidProjectDataException {
+		project = new Project(pData);
 	}
 	
 	public List<Project> getProjects() {
 		List<Project> allProjects = null;
 		
 		return allProjects;
+	}
+	
+	public void createTask(TaskData tData) {
+		project.createTask(tData);
+	}
+	
+	public void taskStatusUpdate(TaskUpdateData tUData) {
+		project.taskStatusUpdate(tUData);
 	}
 }
