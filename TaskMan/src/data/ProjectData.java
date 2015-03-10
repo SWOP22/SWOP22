@@ -7,7 +7,7 @@ public class ProjectData {
 	private String description;
 	private Date creationTime;
 	private Date dueTime;
-		
+	
 	public String getName() {
 		return name;
 	}

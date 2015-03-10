@@ -6,18 +6,15 @@ import task.Task;
 public class DTOHandler {
 
 	public ProjectData getProjectData() {
-		// TODO Auto-generated method stub
-		return null;
+		return new ProjectData();
 	}
 
 	public TaskData getTaskData(Project project) {
-		// TODO Auto-generated method stub
-		return null;
+		return new TaskData(project);
 	}
 
 	public TaskUpdateData getTaskUpdateData(Task task) {
-		// TODO Auto-generated method stub
-		return null;
+		return new TaskUpdateData(task);
 	}
 
 }
