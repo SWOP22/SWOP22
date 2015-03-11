@@ -94,12 +94,12 @@ public class Project {
     }
 
 	public void createTask(TaskData tData) {
-		Task newTask = new Task(tData);
-		allTasks.add(newTask);
+		/*Task newTask = new Task(tData);
+		allTasks.add(newTask);*/
 	}
 
 	public void taskStatusUpdate(TaskUpdateData tUData) {
-		Task.setStatus(tUData);
+		//Task.setStatus(tUData);
 	}
 	
 }

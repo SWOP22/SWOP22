@@ -4,10 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/*
- * TODO: unit tests
- */
-
 /**
  * Task class to represent the task objects as described in the assignment.
  * 
@@ -23,8 +19,6 @@ import java.util.List;
  * depend on, or be an alternate for each other.
  */
 public class Task {
-    // taskID is only used in the toString method to simulate the example scenario as given in
-    // the assignment
     private int taskID;
     private String description;
     private User user;
