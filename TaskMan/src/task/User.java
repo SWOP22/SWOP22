@@ -1,19 +1,19 @@
 package task;
 
-// Tijdelijke oplossing!!
-// Deze klasse zal uiteindelijk niet in de task package staan
+/**
+ * Represents users who can perform tasks
+ */
 public class User {
     private String name;
 
-    public User(String name) {
+    public User(String name) throws Exception {
+	if (name == null || name.equals("")) {
+	    throw new Exception("Username can not be null or empty!");
+	}
 	this.name = name;
     }
 
     public String getName() {
 	return this.name;
-    }
-
-    public void setName(String name) {
-	this.name = name;
     }
 }

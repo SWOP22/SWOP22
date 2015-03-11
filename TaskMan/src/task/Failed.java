@@ -1,5 +1,8 @@
 package task;
 
+/**
+ * Represents the failed status
+ */
 public class Failed implements Status {
     @Override
     public boolean ongoing() {
@@ -9,5 +12,10 @@ public class Failed implements Status {
     @Override
     public boolean finished() {
 	return false;
+    }
+
+    @Override
+    public String getStatus() {
+	return "failed";
     }
 }

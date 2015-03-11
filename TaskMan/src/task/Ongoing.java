@@ -1,5 +1,8 @@
 package task;
 
+/**
+ * Represents the ongoing status
+ */
 public class Ongoing implements Status {
     @Override
     public boolean ongoing() {
@@ -9,5 +12,10 @@ public class Ongoing implements Status {
     @Override
     public boolean finished() {
 	return false;
+    }
+
+    @Override
+    public String getStatus() {
+	return "ongoing";
     }
 }
