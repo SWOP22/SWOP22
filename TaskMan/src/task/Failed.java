@@ -13,6 +13,11 @@ public class Failed implements Status {
     public boolean finished() {
 	return false;
     }
+    
+    @Override
+    public boolean failed() {
+	return true;
+    }
 
     @Override
     public String getStatus() {

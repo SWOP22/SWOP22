@@ -1,8 +1,12 @@
 package task;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import data.TaskData;
+import data.TaskUpdateData;
 
 /**
  * Task class to represent the task objects as described in the assignment.
@@ -13,10 +17,7 @@ import java.util.List;
  * 
  * Because we wanted the minimize the coupling between the Project and the Task classes, the
  * association between them is unidirectional. Tasks have no information about the projects that own
- * them. Therefore, they can not guarantee that their dependencies and alternates relate to tasks of
- * the same project. To solve this problem without increasing the coupling between the 2 classes and
- * following the Information Expert principle, a project must guarantee that it's tasks can only
- * depend on, or be an alternate for each other.
+ * them.
  */
 public class Task {
     private int taskID;
@@ -25,13 +26,14 @@ public class Task {
     private int estimatedDuration; // in minutes
     private int acceptableDeviation; // represents a percentage
     private List<Task> dependencyTasks;
-    private Task alternateTask;
+    private Task alternateFor;
     private TimeSpan timeSpan;
     private Status status;
 
     /**
-     * The constructor for the Task class. To simplify the consistency checking, the status of a new
-     * task is always "ongoing" and the time span is always set to null.
+     * Constructor for the Task class. To simplify the consistency checking, the status of a new
+     * task is always "ongoing" and the time span is always initialized with start and end time ==
+     * null.
      * 
      * @param taskID
      *            identifier for this task, ID's start from 0
@@ -47,17 +49,17 @@ public class Task {
      * @param dependencyTasks
      *            a list that contains the tasks that need to be completed before this task can be
      *            finished, can not contain null values and can not cause a loops
-     * @param alternateTask
-     *            the alternate task can replace this task to complete the project, can be null, can
-     *            not cause a loop
+     * @param alternateFor
+     *            this task can replace the alternateFor to complete the project, must be a failed
+     *            task or null
      * @throws Exception
      *             if the given arguments are not valid, an exception will be thrown
      */
     public Task(int taskID, String description, User user, int estimatedDuration,
-	    int acceptableDeviation, List<Task> dependencyTasks, Task alternateTask)
+	    int acceptableDeviation, List<Task> dependencyTasks, Task alternateFor)
 	    throws Exception {
-	// New tasks don't have a time span and have the status ongoing
-	this.timeSpan = null;
+	// New tasks don't have a start/end time and have the status ongoing
+	this.timeSpan = new TimeSpan(null, null);
 	this.status = new Ongoing();
 
 	// Check all arguments
@@ -71,7 +73,7 @@ public class Task {
 	} else {
 	    checkDependencyTasks(dependencyTasks);
 	}
-	checkAlternateTask(alternateTask);
+	checkAlternateFor(alternateFor);
 
 	// After all arguments are checked, assign values
 	this.taskID = taskID;
@@ -80,7 +82,67 @@ public class Task {
 	this.estimatedDuration = estimatedDuration;
 	this.acceptableDeviation = acceptableDeviation;
 	this.dependencyTasks = dependencyTasks;
-	this.alternateTask = alternateTask;
+	this.alternateFor = alternateFor;
+    }
+
+    /**
+     * Constructor for the task class that uses a TaskData object to initialize its data. Uses the
+     * other constructor to avoid double code. The given TaskData object can not be null!
+     * 
+     * @param taskID
+     *            identifier for this task, ID's start from 0
+     * @param taskData
+     *            except for the task ID, the TaskData object must supply all the arguments of the
+     *            other constructor via get methods
+     * @throws Exception
+     *             if the given arguments are not valid, an exception will be thrown
+     * @throws NullPointerException
+     *             if taskData == null
+     */
+    public Task(int taskID, TaskData taskData) throws Exception, NullPointerException {
+	this(taskID, taskData.getDescription(), taskData.getUser(),
+		taskData.getEstimatedDuration(), taskData.getAcceptableDeviation(), taskData
+			.getDependencyTasks(), taskData.getAlternateFor());
+    }
+
+    /**
+     * Method for updating the start time, the end time or the status. If the status gets set to
+     * finished or failed, the end time must be set as well and if the end time gets set, the status
+     * must be set to finished or failed.
+     * 
+     * @throws Exception
+     *             if invalid update data or task.ongoing() == false
+     */
+    public void updateTask(TaskUpdateData updateData) throws Exception {
+	checkOngoing();
+
+	if (updateData == null) {
+	    throw new Exception("Can not update a task with a null object!");
+	}
+	if (this != updateData.getTask()) {
+	    throw new Exception("A task can not update another task!");
+	}
+
+	// the set method will perform all the necessary checks
+	setStartTime(updateData.getStartTime());
+
+	// if the update data has an end time, it must have a finished/failed status
+	if (updateData.getEndTime() != null) {
+	    if (updateData.getStatus() == null) {
+		throw new Exception(
+			"Can not set the end time without setting the status to finished or failed!");
+	    }
+	    if (updateData.getStatus().ongoing()) {
+		throw new Exception(
+			"Can not set the end time without setting the status to finished or failed!");
+	    }
+	    // the setter will perform all the other checks
+	    setEndTime(updateData.getEndTime());
+	}
+
+	// the set method guarantees that the status can not be changed to finished or failed,
+	// if the start or end time is not set
+	setStatus(updateData.getStatus());
     }
 
     /**
@@ -214,58 +276,65 @@ public class Task {
     }
 
     /**
-     * @return an alternate task if one is set, null otherwise
+     * @return a task that this task can replace if one is set, null otherwise
      */
-    public Task getAlternateTask() {
-	return alternateTask;
+    public Task getAlternateFor() {
+	return alternateFor;
     }
 
     /**
-     * Sets an alternate task. The alternate task can replace the task that owns it to finish a
-     * project. Can not be changed if the task is finished or has failed.
+     * Sets this task as an alternate. An alternate task can replace a failed task to complete the
+     * project.
      * 
      * @throws Exception
-     *             if ongoing() == false or the given alternate task caused a loop
+     *             if ongoing() == false or alternateFor.failed() == false
      */
-    public void setAlternateTask(Task alternateTask) throws Exception {
+    public void setAlternateFor(Task alternateFor) throws Exception {
 	checkOngoing();
-	checkAlternateTask(alternateTask);
-	this.alternateTask = alternateTask;
+	checkAlternateFor(alternateFor);
+	this.alternateFor = alternateFor;
     }
 
     /**
-     * @return if the task is finished or has failed, a TimeSpan object that indicates the start and
-     *         end time will be returned, null otherwise
+     * @return a TimeSpan object that contains the start and end time of this task, if they are set
      */
     public TimeSpan getTimeSpan() {
 	return timeSpan;
     }
 
     /**
-     * Sets the time span of an ongoing task.
+     * Sets the start time of an ongoing task.
      * 
      * @throws Exception
-     *             if end time is before start time or ongoing() == false
+     *             if the given startTime == null, if the end time is also set and before the given
+     *             start time, if the given start time is before the end time of any of the tasks'
+     *             dependencies or if ongoing() == false
      */
-    public void setTimeSpan(TimeSpan timeSpan) throws Exception {
+    private void setStartTime(LocalDateTime startTime) throws Exception {
 	checkOngoing();
-	checkTimeSpan(timeSpan);
-	this.timeSpan = timeSpan;
+	checkSetStartTime(startTime);
+	timeSpan.setStartTime(startTime);
     }
 
     /**
-     * @return the status of the task
+     * Sets the end time of an ongoing task.
+     * 
+     * @throws Exception
+     *             if the given endTime == null, if the start time is not set, if the given end time
+     *             is before the start time or if ongoing() == false
+     */
+    private void setEndTime(LocalDateTime endTime) throws Exception {
+	checkOngoing();
+	checkSetEndTime(endTime);
+	timeSpan.setEndTime(endTime);
+    }
+
+    /**
+     * @return the status of the task, availability must be checked by the project that owns this
+     *         task
      */
     public String getStatus() {
-	if (ongoing()) {
-	    if (available()) {
-		return "available";
-	    } else {
-		return "unavailable";
-	    }
-	} else {
-	    return status.getStatus();
-	}
+	return status.getStatus();
     }
 
     /**
@@ -283,58 +352,31 @@ public class Task {
     }
 
     /**
-     * @return true if ongoing() == true and all dependencies are either finished or have a finished
-     *         alternate, false otherwise
+     * @return true if the task has failed, false otherwise
      */
-    public boolean available() {
-	if (!ongoing()) {
-	    return false;
-	} else {
-	    for (Task task : getDependencyTasks()) {
-		if (!task.finished()) {
-		    if (!alternateTaskFinished(task)) {
-			return false;
-		    }
-		}
-	    }
-	}
-	return true;
-    }
-
-    /**
-     * private method that recursively checks whether a task has a finished alternative
-     */
-    private boolean alternateTaskFinished(Task task) {
-	Task alternateTask = task.getAlternateTask();
-	if (alternateTask == null) {
-	    return false;
-	} else {
-	    if (!alternateTask.finished()) {
-		return alternateTaskFinished(alternateTask);
-	    }
-	}
-	return true;
+    public boolean failed() {
+	return status.failed();
     }
 
     /**
      * Changes the status of an ongoing task. The argument can not be null, because a task must have
-     * a status. The status can not be set to finished or failed, if the time span is not set. So
-     * when setting the status to finished or failed, the time span must be set first. The status
-     * can not be set to failed, if no alternative is set.
+     * a status. The status can not be set to finished or failed, if the start and end time are not
+     * set. If a task is set to finished or failed, it can no longer be modified!
      * 
      * @throws Exception
-     *             if argument == null || ongoing() == false || (argument == finished && timespan ==
-     *             null) || (argument == failed && timespan == null) || (argument == failed &&
-     *             alternate == null)
+     *             if argument == null || ongoing() == false || (argument == finished &&
+     *             (timeSpan.getStartTime() == null || timeSpan.getEndTime() == null)) || (argument
+     *             == failed && (timeSpan.getStartTime() == null || timeSpan.getEndTime() == null))
      */
-    public void setStatus(Status status) throws Exception {
+    private void setStatus(Status status) throws Exception {
 	checkOngoing();
 	checkStatus(status);
 	this.status = status;
     }
 
     /**
-     * The string representation of a task object as shown in the assignment
+     * The string representation of a task object as shown in the assignment (except for
+     * availability)
      */
     @Override
     public String toString() {
@@ -343,8 +385,8 @@ public class Task {
 	for (Task task : dependencyTasks) {
 	    result += ", depends on task " + task.getTaskID();
 	}
-	if (alternateTask != null) {
-	    result += ", has alternate " + alternateTask.getTaskID();
+	if (alternateFor != null) {
+	    result += ", alternate for " + alternateFor.getTaskID();
 	}
 	if (!ongoing()) {
 	    result += ", started " + timeSpan.getStartTime() + ", finished "
@@ -438,38 +480,41 @@ public class Task {
 	}
     }
 
-    private void checkAlternateTask(Task alternateTask) throws Exception {
-	if (finished()) {
-	    throw new Exception("Can not modify the alternate task of a finished task!");
-	}
-	// If the alternate task is not null, check for loop
-	if (alternateTask != null) {
-	    // An alternate task can not be itself
-	    if (this == alternateTask) {
-		throw new Exception("A task can not be an alternate for itself!");
+    private void checkAlternateFor(Task alternateFor) throws Exception {
+	// If the alternate task is not null, check if failed
+	if (alternateFor != null) {
+	    if (!alternateFor.failed()) {
+		throw new Exception("A task can only be an alternate for a failed task!");
 	    }
-	    // Loop check
-	    List<Task> notAllowed = new ArrayList<Task>();
-	    notAllowed.add(this);
-	    alternateTaskLoopCheck(alternateTask, notAllowed);
 	}
     }
 
-    private void alternateTaskLoopCheck(Task task, List<Task> notAllowed) throws Exception {
-	if (task != null) {
-	    if (notAllowed.contains(task)) {
-		throw new Exception("The given alternate caused a loop!");
-	    }
-	    notAllowed.add(task);
-	    alternateTaskLoopCheck(task.getAlternateTask(), notAllowed);
+    private void checkSetStartTime(LocalDateTime startTime) throws Exception {
+	if (startTime == null) {
+	    throw new Exception("Can not set the start time to null!");
 	}
+	// check if the given start time is after the end time of all the tasks this task depends on
+	for (Task task : dependencyTasks) {
+	    if (task.getTimeSpan().getEndTime() == null) {
+		throw new Exception(
+			"Start time not accepted because a dependency has not yet finished!");
+	    }
+	    if (startTime.isBefore(task.getTimeSpan().getEndTime())) {
+		throw new Exception(
+			"Start time not accepted because a dependency has not yet finished!");
+	    }
+	}
+	// The TimeSpan class guarantees that, if set, the end time can not be before a start time
     }
 
-    private void checkTimeSpan(TimeSpan timeSpan) throws Exception {
-	// If the time span is set, the end time may not be before the start time
-	if (timeSpan != null && timeSpan.getStartTime() > timeSpan.getEndTime()) {
-	    throw new Exception("The start time has to be before or equal to the end time!");
+    private void checkSetEndTime(LocalDateTime endTime) throws Exception {
+	if (endTime == null) {
+	    throw new Exception("Can not set the end time to null!");
 	}
+	if (timeSpan.getStartTime() == null) {
+	    throw new Exception("Can not set the end time if the start time is not set!");
+	}
+	// The TimeSpan class guarantees that, if set, the end time can not be before a start time
     }
 
     private void checkStatus(Status status) throws Exception {
@@ -478,17 +523,13 @@ public class Task {
 	    throw new Exception("A task must have a status!");
 	}
 	// The status can only be set to finished if the time span is set
-	if (status.finished() && this.timeSpan == null) {
-	    throw new Exception("A task can only be finished if it has a time span!");
+	if (status.finished() && (timeSpan.getStartTime() == null || timeSpan.getEndTime() == null)) {
+	    throw new Exception("A task can only be finished if it has a start and end time!");
 	}
 	// The status can only be set to failed if the time span is set
-	if ((!status.finished() && !status.ongoing()) && this.timeSpan == null) {
+	if (status.failed() && (timeSpan.getStartTime() == null || timeSpan.getEndTime() == null)) {
 	    throw new Exception(
-		    "The task status can only be set to failed if the time span is set!");
-	}
-	// The status can only be set to failed if an alternate is set
-	if ((!status.finished() && !status.ongoing()) && this.alternateTask == null) {
-	    throw new Exception("The task status can only be set to failed if an alternate is set!");
+		    "The task status can only be set to failed if the start and end time are set!");
 	}
     }
 }

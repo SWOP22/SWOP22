@@ -7,74 +7,74 @@ import task.Task;
 import task.User;
 
 public class TaskData {
-	// the project where you want to create the task with this data
-	private Project project;
-	private String description;
+    // the the project that will own this task
+    private Project project;
+    private String description;
     private User user;
     private int estimatedDuration; // in minutes
-    private double acceptableDeviation; // percentage
+    private int acceptableDeviation; // percentage
     // contains the tasks that need to be completed before this task can start
     private List<Task> dependencyTasks;
-    // the alternateTask can replace this task to complete the project
-    private Task alternateTask;
-    
+    // the alternateFor can replace a task to complete the project
+    private Task alternateFor;
+
     public TaskData(Project project) {
-    	this.project = project;
+	this.project = project;
     }
-    
+
     public Project getProject() {
-    	return project;
+	return project;
     }
-    
+
     public String getDescription() {
-    	return description;
+	return description;
     }
 
     public void setDescription(String description) {
-    	this.description = description;
+	this.description = description;
     }
 
-    public String getUserName() {
-    	return user.getName();
+    public User getUser() {
+	return user;
     }
 
     public void setUser(User user) {
-    	this.user = user;
+	this.user = user;
     }
 
     public int getEstimatedDuration() {
-    	return estimatedDuration;
+	return estimatedDuration;
     }
 
     public void setEstimatedDuration(int estimatedDuration) {
-    	this.estimatedDuration = estimatedDuration;
+	this.estimatedDuration = estimatedDuration;
     }
 
-    public double getAcceptableDeviation() {
-    	return acceptableDeviation;
+    public int getAcceptableDeviation() {
+	return acceptableDeviation;
     }
 
-    public void setAcceptableDeviation(double acceptableDeviation) {
-    	this.acceptableDeviation = acceptableDeviation;
+    public void setAcceptableDeviation(int acceptableDeviation) {
+	this.acceptableDeviation = acceptableDeviation;
     }
 
     public List<Task> getDependencyTasks() {
-    	return dependencyTasks;
+	return dependencyTasks;
     }
 
     public void setDependencyTasks(List<Task> dependencyTasks) {
-    	this.dependencyTasks = dependencyTasks;
+	this.dependencyTasks = dependencyTasks;
     }
 
     public void addDependencyTask(Task dependencyTask) {
-    	this.dependencyTasks.add(dependencyTask);
+	this.dependencyTasks.add(dependencyTask);
     }
 
-    public Task getAlternateTask() {
-    	return alternateTask;
+    public Task getAlternateFor() {
+	return alternateFor;
     }
-    
-    public void setAlternateTask(Task alternateTask) {
-    	this.alternateTask = alternateTask;
+
+    public void setAlternateFor(Task alternateFor) {
+	this.alternateFor = alternateFor;
     }
 }
