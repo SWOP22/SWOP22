@@ -211,6 +211,17 @@ public class Task {
 	checkDuration(estimatedDuration);
 	this.estimatedDuration = estimatedDuration;
     }
+    
+    /**
+     * @return the estimated time this task should be finished, null if the task hasn't started
+     */
+    public LocalDateTime getEstimatedEndTime() {
+	if (timeSpan.getStartTime() == null) {
+	    return null;
+	}
+	// TODO: calculate estimated end time with WorkTime class
+	return null;
+    }
 
     /**
      * @return a percentage that determines whether the task is finished on time, not < 0

@@ -10,13 +10,14 @@ import exceptions.InvalidProjectDataException;
 import task.Ongoing;
 import task.Status;
 import task.Task;
+import time.TimeObserver;
 
 /**
  * 
  * @author SWOP22
  *
  */
-public class Project {
+public class Project implements TimeObserver {
 	
 	private int projectID;
 	private String name;
@@ -231,5 +232,11 @@ public class Project {
     	}
     	
     	return response;
+    }
+
+    @Override
+    public void update(LocalDateTime currentTime) {
+	// TODO Auto-generated method stub
+	
     }
 }
