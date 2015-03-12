@@ -1,15 +1,15 @@
 package main;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import data.DTOHandler;
-import data.InvalidProjectDataException;
-import data.InvalidTaskDataException;
-import data.InvalidTaskUpdateDataException;
 import data.ProjectData;
 import data.TaskData;
 import data.TaskUpdateData;
+import exceptions.InvalidProjectDataException;
+import exceptions.InvalidTaskDataException;
+import exceptions.InvalidTaskUpdateDataException;
 import project.Project;
 import task.Task;
 import time.InvalidTimeStampException;
@@ -73,7 +73,7 @@ public class FrontController {
 	 * @param time the TimeStamp to advance the system to.
 	 * @throws InvalidTimeStampException thrown when the given TimeStamp is not valid.
 	 */
-	public void advanceTime(Date time) throws InvalidTimeStampException {
+	public void advanceTime(LocalDateTime time) throws InvalidTimeStampException {
 		taskMan.advanceTime(time);
 	}
 	

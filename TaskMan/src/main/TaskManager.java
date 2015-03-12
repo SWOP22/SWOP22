@@ -1,15 +1,15 @@
 package main;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import project.Project;
 import project.ProjectHandler;
 import time.TimeHandler;
-import data.InvalidProjectDataException;
 import data.ProjectData;
 import data.TaskData;
 import data.TaskUpdateData;
+import exceptions.InvalidProjectDataException;
 
 public class TaskManager {
 	
@@ -37,7 +37,7 @@ public class TaskManager {
 		pH.taskStatusUpdate(tUData);
 	}
 
-	public void advanceTime(Date time) {
+	public void advanceTime(LocalDateTime time) {
 		tH.advanceTime(time);
 	}
 

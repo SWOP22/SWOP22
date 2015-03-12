@@ -27,7 +27,6 @@ public class Project implements TimeObserver {
 	private Status status;
 	private List<Task> allTasks;
 	
-	
 	public Project(int projectID, ProjectData pData) throws InvalidProjectDataException {
 		String pName = pData.getName();
 		String pDescription = pData.getDescription();

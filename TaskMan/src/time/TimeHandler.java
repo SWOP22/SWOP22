@@ -1,11 +1,14 @@
 package time;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class TimeHandler {
+	
+	public void createTime(LocalDateTime time) {
+		
+	}
 
-	public void advanceTime(Date time) {
-		// TODO Auto-generated method stub
+	public void advanceTime(LocalDateTime time) {
 		
 	}
 
