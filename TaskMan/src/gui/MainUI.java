@@ -13,6 +13,7 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
@@ -22,9 +23,9 @@ import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import data.InvalidProjectDataException;
-import data.InvalidTaskDataException;
-import data.InvalidTaskUpdateDataException;
+import exceptions.InvalidProjectDataException;
+import exceptions.InvalidTaskDataException;
+import exceptions.InvalidTaskUpdateDataException;
 import data.ProjectData;
 import data.TaskData;
 import data.TaskUpdateData;
@@ -335,9 +336,11 @@ public class MainUI extends JFrame {
 				ProjectData pData = fc.getProjectData();
 				pData.setName(textField_project_name.getText());
 				pData.setDescription(textField_project_description.getText());
-				Date creationTime = new Date();
+				//Has to be initialized
+				LocalDateTime creationTime = null;
 				pData.setCreationTime(creationTime);
-				Date dueTime = new Date();
+				//Has to be initialized
+				LocalDateTime dueTime = null;
 				pData.setDueTime(dueTime);
 				try {
 					fc.createProject(pData);
@@ -375,9 +378,11 @@ public class MainUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(taskList.getSelectedValue() != null){
 					TaskUpdateData tUData = fc.getTaskUpdateData(taskList.getSelectedValue());
-					Date startTime = new Date();
+					//Has to be initialized
+					LocalDateTime startTime = null;
 					tUData.setStartTime(startTime);
-					Date endTime = new Date();
+					//Has to be initialized
+					LocalDateTime endTime = null;
 					tUData.setEndTime(endTime);
 					tUData.setStatus((Status) comboBox_status.getSelectedItem());
 					try {
@@ -395,7 +400,8 @@ public class MainUI extends JFrame {
 		
 		btnAdvanceTime.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Date time = new Date();
+				//Has to be initialized
+				LocalDateTime time = null;
 				try {
 					fc.advanceTime(time);
 				} catch (InvalidTimeStampException e1) {
