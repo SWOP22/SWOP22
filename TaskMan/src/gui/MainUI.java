@@ -30,6 +30,8 @@ import project.Project;
 import task.Task;
 import time.InvalidTimeStampException;
 import time.TimeStamp;
+import javax.swing.JMenuItem;
+import javax.swing.JComboBox;
 
 public class MainUI extends JFrame {
 
@@ -52,6 +54,17 @@ public class MainUI extends JFrame {
 	private DefaultListModel<Task> taskListModel;
 	private JList<Task> taskList;
 	private JButton btnAdvanceTime;
+	private JTextField textField_start;
+	private JTextField textField_end;
+	private JTextField textField_date;
+	private JTextField textField_task_description;
+	private JTextField textField_task_duration;
+	private JTextField textField_task_deviation;
+	private JList list_task_dependencies;
+	private JTextField textField_project_name;
+	private JTextField textField_project_description;
+	private JTextField textField_project_start;
+	private JTextField textField_project_due;
 	/**
 	 * Launch the application.
 	 */
@@ -139,6 +152,131 @@ public class MainUI extends JFrame {
 
 		btnAdvanceTime.setBounds(15, 478, 117, 23);
 		contentPane.add(btnAdvanceTime);
+		
+		JLabel lblDate = new JLabel("date");
+		lblDate.setBounds(150, 482, 46, 14);
+		contentPane.add(lblDate);
+		
+		JLabel lblStartDate = new JLabel("start date");
+		lblStartDate.setBounds(150, 404, 70, 14);
+		contentPane.add(lblStartDate);
+		
+		JLabel lblEndDate = new JLabel("end date");
+		lblEndDate.setBounds(150, 435, 70, 14);
+		contentPane.add(lblEndDate);
+		
+		textField_start = new JTextField();
+		textField_start.setBounds(230, 401, 86, 20);
+		contentPane.add(textField_start);
+		textField_start.setColumns(10);
+		
+		textField_end = new JTextField();
+		textField_end.setBounds(230, 432, 86, 20);
+		contentPane.add(textField_end);
+		textField_end.setColumns(10);
+		
+		textField_date = new JTextField();
+		textField_date.setBounds(230, 479, 86, 20);
+		contentPane.add(textField_date);
+		textField_date.setColumns(10);
+		
+		JLabel lblState = new JLabel("state");
+		lblState.setBounds(340, 404, 59, 14);
+		contentPane.add(lblState);
+		
+		JLabel lblDescription = new JLabel("description");
+		lblDescription.setBounds(150, 324, 70, 14);
+		contentPane.add(lblDescription);
+		
+		textField_task_description = new JTextField();
+		textField_task_description.setBounds(230, 321, 545, 20);
+		contentPane.add(textField_task_description);
+		textField_task_description.setColumns(10);
+		
+		JLabel lblDuration = new JLabel("duration");
+		lblDuration.setBounds(150, 349, 70, 14);
+		contentPane.add(lblDuration);
+		
+		textField_task_duration = new JTextField();
+		textField_task_duration.setBounds(230, 346, 86, 20);
+		contentPane.add(textField_task_duration);
+		textField_task_duration.setColumns(10);
+		
+		JLabel lblDeviation = new JLabel("deviation");
+		lblDeviation.setBounds(150, 374, 70, 14);
+		contentPane.add(lblDeviation);
+		
+		textField_task_deviation = new JTextField();
+		textField_task_deviation.setBounds(230, 371, 86, 20);
+		contentPane.add(textField_task_deviation);
+		textField_task_deviation.setColumns(10);
+		
+		JLabel lblUser = new JLabel("user");
+		lblUser.setBounds(340, 349, 59, 14);
+		contentPane.add(lblUser);
+		
+		JLabel lblAlternate = new JLabel("alternate");
+		lblAlternate.setBounds(340, 374, 59, 14);
+		contentPane.add(lblAlternate);
+		
+		JComboBox comboBox_task_user = new JComboBox();
+		comboBox_task_user.setBounds(409, 346, 93, 20);
+		contentPane.add(comboBox_task_user);
+		
+		JComboBox comboBox_task_alternate = new JComboBox();
+		comboBox_task_alternate.setBounds(409, 371, 93, 20);
+		contentPane.add(comboBox_task_alternate);
+		
+		JComboBox comboBox_state = new JComboBox();
+		comboBox_state.setBounds(409, 401, 93, 20);
+		contentPane.add(comboBox_state);
+		
+		JLabel lblDependencies = new JLabel("dependencies");
+		lblDependencies.setBounds(520, 352, 70, 14);
+		contentPane.add(lblDependencies);
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBounds(600, 352, 175, 50);
+		contentPane.add(scrollPane_2);
+		
+		list_task_dependencies = new JList();
+		scrollPane_2.setViewportView(list_task_dependencies);
+		
+		JLabel lblName = new JLabel("name");
+		lblName.setBounds(150, 244, 70, 14);
+		contentPane.add(lblName);
+		
+		textField_project_name = new JTextField();
+		textField_project_name.setBounds(230, 241, 86, 20);
+		contentPane.add(textField_project_name);
+		textField_project_name.setColumns(10);
+		
+		JLabel lblDescription_1 = new JLabel("description");
+		lblDescription_1.setBounds(150, 269, 70, 14);
+		contentPane.add(lblDescription_1);
+		
+		textField_project_description = new JTextField();
+		textField_project_description.setBounds(230, 266, 545, 20);
+		contentPane.add(textField_project_description);
+		textField_project_description.setColumns(10);
+		
+		JLabel lblStartDate_1 = new JLabel("start date");
+		lblStartDate_1.setBounds(340, 244, 59, 14);
+		contentPane.add(lblStartDate_1);
+		
+		textField_project_start = new JTextField();
+		textField_project_start.setBounds(409, 241, 86, 20);
+		contentPane.add(textField_project_start);
+		textField_project_start.setColumns(10);
+		
+		JLabel lblDueDate = new JLabel("due date");
+		lblDueDate.setBounds(520, 244, 70, 14);
+		contentPane.add(lblDueDate);
+		
+		textField_project_due = new JTextField();
+		textField_project_due.setBounds(600, 241, 86, 20);
+		contentPane.add(textField_project_due);
+		textField_project_due.setColumns(10);
 		
 	}
 	
