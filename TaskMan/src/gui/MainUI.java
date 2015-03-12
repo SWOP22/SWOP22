@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.util.Date;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
@@ -52,7 +53,6 @@ public class MainUI extends JFrame {
 	private JButton btnUpdateTask;
 	private JButton btnShowTasks;
 	private JButton btnShowTaskDetails;
-	private JTextField textField;
 	private DefaultListModel<Project> projectListModel;
 	private JList<Project> projectList;
 	private DefaultListModel<Task> taskListModel;
@@ -70,11 +70,11 @@ public class MainUI extends JFrame {
 	private JTextField textField_project_description;
 	private JTextField textField_project_start;
 	private JTextField textField_project_due;
-	private DefaultListModel<User> userListModel;
+	private DefaultComboBoxModel<User> userListModel;
 	private JComboBox<User> comboBox_task_user;
-	private DefaultListModel<Task> taskListModel_alternate;
+	private DefaultComboBoxModel<Task> taskListModel_alternate;
 	private JComboBox<Task> comboBox_task_alternate;
-	private DefaultListModel<Status> statusListModel;
+	private DefaultComboBoxModel<Status> statusListModel;
 	private JComboBox<Status> comboBox_status;
 	/**
 	 * Launch the application.
@@ -236,15 +236,15 @@ public class MainUI extends JFrame {
 		lblAlternate.setBounds(340, 374, 59, 14);
 		contentPane.add(lblAlternate);
 		
-		comboBox_task_user = new JComboBox<User>();
+		comboBox_task_user = new JComboBox<User>(userListModel);
 		comboBox_task_user.setBounds(409, 346, 93, 20);
 		contentPane.add(comboBox_task_user);
 		
-		comboBox_task_alternate = new JComboBox<Task>();
+		comboBox_task_alternate = new JComboBox<Task>(taskListModel_alternate);
 		comboBox_task_alternate.setBounds(409, 371, 93, 20);
 		contentPane.add(comboBox_task_alternate);
 		
-		comboBox_status = new JComboBox<Status>();
+		comboBox_status = new JComboBox<Status>(statusListModel);
 		comboBox_status.setBounds(409, 401, 93, 20);
 		contentPane.add(comboBox_status);
 		
