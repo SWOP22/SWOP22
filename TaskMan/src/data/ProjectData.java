@@ -1,12 +1,14 @@
 package data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 public class ProjectData {
+	
 	private String name;
 	private String description;
-	private Date creationTime;
-	private Date dueTime;
+	private LocalDateTime creationTime;
+	private LocalDateTime dueTime;
 	
 	public String getName() {
 		return name;
@@ -14,23 +16,23 @@ public class ProjectData {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	public String getDescription() {
 		return description;
 	}
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Date getCreationTime() {
+	public LocalDateTime getCreationTime() {
 		return creationTime;
 	}
-	public void setCreationTime(Date creationTime) {
+	public void setCreationTime(LocalDateTime creationTime) {
 		this.creationTime = creationTime;
 	}
-	public Date getDueTime() {
+	public LocalDateTime getDueTime() {
 		return dueTime;
 	}
-	public void setDueTime(Date dueTime) {
+	public void setDueTime(LocalDateTime dueTime) {
 		this.dueTime = dueTime;
-	}
-	
+	}	
 }
