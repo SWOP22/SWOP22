@@ -1,5 +1,6 @@
 package main;
 
+import java.util.Date;
 import java.util.List;
 
 import data.DTOHandler;
@@ -12,7 +13,6 @@ import data.TaskUpdateData;
 import project.Project;
 import task.Task;
 import time.InvalidTimeStampException;
-import time.TimeStamp;
 
 /**
  * The FrontController is a FacadeController for the TaskManager system.
@@ -73,7 +73,7 @@ public class FrontController {
 	 * @param time the TimeStamp to advance the system to.
 	 * @throws InvalidTimeStampException thrown when the given TimeStamp is not valid.
 	 */
-	public void advanceTime(TimeStamp time) throws InvalidTimeStampException {
+	public void advanceTime(Date time) throws InvalidTimeStampException {
 		taskMan.advanceTime(time);
 	}
 	

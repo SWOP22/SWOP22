@@ -13,6 +13,7 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -27,9 +28,12 @@ import data.ProjectData;
 import data.TaskData;
 import data.TaskUpdateData;
 import project.Project;
+import task.Status;
 import task.Task;
+import task.User;
 import time.InvalidTimeStampException;
 import time.TimeStamp;
+
 import javax.swing.JMenuItem;
 import javax.swing.JComboBox;
 
@@ -60,11 +64,18 @@ public class MainUI extends JFrame {
 	private JTextField textField_task_description;
 	private JTextField textField_task_duration;
 	private JTextField textField_task_deviation;
-	private JList list_task_dependencies;
+	private DefaultListModel<Task> taskListModel_dependencies;
+	private JList<Task> list_task_dependencies;
 	private JTextField textField_project_name;
 	private JTextField textField_project_description;
 	private JTextField textField_project_start;
 	private JTextField textField_project_due;
+	private DefaultListModel<User> userListModel;
+	private JComboBox<User> comboBox_task_user;
+	private DefaultListModel<Task> taskListModel_alternate;
+	private JComboBox<Task> comboBox_task_alternate;
+	private DefaultListModel<Status> statusListModel;
+	private JComboBox<Status> comboBox_status;
 	/**
 	 * Launch the application.
 	 */
@@ -88,6 +99,12 @@ public class MainUI extends JFrame {
 		setupFrames();
 		createEvents();
 		fc = new FrontController();
+		for(Status status : fc.getAllStatus()){
+			statusListModel.addElement(status);
+		}
+		for(User user : fc.getAllUsers()){
+			userListModel.addElement(user);
+		}
 	}
 	
 	public void setupFrames() {
@@ -219,17 +236,17 @@ public class MainUI extends JFrame {
 		lblAlternate.setBounds(340, 374, 59, 14);
 		contentPane.add(lblAlternate);
 		
-		JComboBox comboBox_task_user = new JComboBox();
+		comboBox_task_user = new JComboBox<User>();
 		comboBox_task_user.setBounds(409, 346, 93, 20);
 		contentPane.add(comboBox_task_user);
 		
-		JComboBox comboBox_task_alternate = new JComboBox();
+		comboBox_task_alternate = new JComboBox<Task>();
 		comboBox_task_alternate.setBounds(409, 371, 93, 20);
 		contentPane.add(comboBox_task_alternate);
 		
-		JComboBox comboBox_state = new JComboBox();
-		comboBox_state.setBounds(409, 401, 93, 20);
-		contentPane.add(comboBox_state);
+		comboBox_status = new JComboBox<Status>();
+		comboBox_status.setBounds(409, 401, 93, 20);
+		contentPane.add(comboBox_status);
 		
 		JLabel lblDependencies = new JLabel("dependencies");
 		lblDependencies.setBounds(520, 352, 70, 14);
@@ -239,7 +256,8 @@ public class MainUI extends JFrame {
 		scrollPane_2.setBounds(600, 352, 175, 50);
 		contentPane.add(scrollPane_2);
 		
-		list_task_dependencies = new JList();
+		taskListModel_dependencies = new DefaultListModel<Task>();
+		list_task_dependencies = new JList<Task>(taskListModel_dependencies);
 		scrollPane_2.setViewportView(list_task_dependencies);
 		
 		JLabel lblName = new JLabel("name");
@@ -299,6 +317,7 @@ public class MainUI extends JFrame {
 				int i = 0;
 				for(Task task : project.getAllTasks()){
 					taskListModel.add(i,task);
+					taskListModel_dependencies.add(i, task);
 					i++;
 				}
 			}
@@ -314,7 +333,12 @@ public class MainUI extends JFrame {
 		btnCreateProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProjectData pData = fc.getProjectData();
-				//TODO input => pdata
+				pData.setName(textField_project_name.getText());
+				pData.setDescription(textField_project_description.getText());
+				Date creationTime = new Date();
+				pData.setCreationTime(creationTime);
+				Date dueTime = new Date();
+				pData.setDueTime(dueTime);
 				try {
 					fc.createProject(pData);
 				} catch (InvalidProjectDataException e1) {
@@ -328,7 +352,12 @@ public class MainUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(projectList.getSelectedValue() != null){
 					TaskData tData = fc.getTaskData(projectList.getSelectedValue());
-					//TODO input => tdata
+					tData.setDescription(textField_task_description.getText());
+					tData.setEstimatedDuration(Integer.parseInt(textField_task_duration.getText()));
+					tData.setAcceptableDeviation(Double.parseDouble(textField_task_deviation.getText()));
+					tData.setUser((User) comboBox_task_user.getSelectedItem());
+					tData.setAlternateTask((Task) comboBox_task_alternate.getSelectedItem()); 
+					tData.setDependencyTasks(list_task_dependencies.getSelectedValuesList());
 					try {
 						fc.createTask(tData);
 					} catch (InvalidTaskDataException e1) {
@@ -346,7 +375,11 @@ public class MainUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(taskList.getSelectedValue() != null){
 					TaskUpdateData tUData = fc.getTaskUpdateData(taskList.getSelectedValue());
-					//TODO input => tudata
+					Date startTime = new Date();
+					tUData.setStartTime(startTime);
+					Date endTime = new Date();
+					tUData.setEndTime(endTime);
+					tUData.setStatus((Status) comboBox_status.getSelectedItem());
 					try {
 						fc.taskStatusUpdate(tUData);
 					} catch (InvalidTaskUpdateDataException e1) {
@@ -362,8 +395,7 @@ public class MainUI extends JFrame {
 		
 		btnAdvanceTime.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TimeStamp time = new TimeStamp();
-				//TODO input => timestamp
+				Date time = new Date();
 				try {
 					fc.advanceTime(time);
 				} catch (InvalidTimeStampException e1) {
