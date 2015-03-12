@@ -30,7 +30,7 @@ public class TaskData {
     	return description;
     }
 
-    public void setDescription(String description) throws Exception {
+    public void setDescription(String description) {
     	this.description = description;
     }
 
@@ -38,7 +38,7 @@ public class TaskData {
     	return user.getName();
     }
 
-    public void setUser(User user) throws Exception {
+    public void setUser(User user) {
     	this.user = user;
     }
 
@@ -46,7 +46,7 @@ public class TaskData {
     	return estimatedDuration;
     }
 
-    public void setEstimatedDuration(int estimatedDuration) throws Exception {
+    public void setEstimatedDuration(int estimatedDuration) {
     	this.estimatedDuration = estimatedDuration;
     }
 
@@ -54,7 +54,7 @@ public class TaskData {
     	return acceptableDeviation;
     }
 
-    public void setAcceptableDeviation(double acceptableDeviation) throws Exception {
+    public void setAcceptableDeviation(double acceptableDeviation) {
     	this.acceptableDeviation = acceptableDeviation;
     }
 
@@ -62,11 +62,11 @@ public class TaskData {
     	return dependencyTasks;
     }
 
-    public void setDependencyTasks(List<Task> dependencyTasks) throws Exception {
+    public void setDependencyTasks(List<Task> dependencyTasks) {
     	this.dependencyTasks = dependencyTasks;
     }
 
-    public void addDependencyTask(Task dependencyTask) throws Exception {
+    public void addDependencyTask(Task dependencyTask) {
     	this.dependencyTasks.add(dependencyTask);
     }
 
@@ -74,7 +74,7 @@ public class TaskData {
     	return alternateTask;
     }
     
-    public void setAlternateTask(Task alternateTask) throws Exception {
+    public void setAlternateTask(Task alternateTask) {
     	this.alternateTask = alternateTask;
     }
 }
