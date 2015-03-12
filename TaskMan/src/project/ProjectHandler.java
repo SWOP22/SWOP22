@@ -1,12 +1,11 @@
 package project;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import data.InvalidProjectDataException;
 import data.ProjectData;
 import data.TaskData;
 import data.TaskUpdateData;
+import exceptions.InvalidProjectDataException;
 
 public class ProjectHandler {
 	private Project project;

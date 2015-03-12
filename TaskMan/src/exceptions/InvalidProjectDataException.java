@@ -1,4 +1,4 @@
-package data;
+package exceptions;
 
 public class InvalidProjectDataException extends Exception {
 
