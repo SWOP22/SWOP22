@@ -32,8 +32,10 @@ public class ProjectHandler {
 		return allProjects;
 	}
 	
-	public int getProjectID() {
-		return allProjects.size();
+	public int getProjectID() throws InvalidProjectDataException {
+		int projectID = allProjects.size();
+		checkSameID(projectID);
+		return projectID;
 	}
 	
 	public void createTask(TaskData tData) throws NullPointerException, Exception {
@@ -53,10 +55,17 @@ public class ProjectHandler {
 	}
 	
 	//Checks
+	public void checkSameID(int projectID) throws InvalidProjectDataException {
+		for(Project project : allProjects) {
+			if(projectID == project.getProjectID())
+				throw new InvalidProjectDataException("Two projects cannot have the same ID.");
+		}
+	}
+	
 	public void checkExistingName(String name) throws InvalidProjectDataException {
 		for(Project project : allProjects) {
 			if(name.equals(project.getName()))
-				throw new InvalidProjectDataException("");
+				throw new InvalidProjectDataException("Two projects cannot have the same name.");
 		}
 	}
 }

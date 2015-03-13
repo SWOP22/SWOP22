@@ -87,14 +87,14 @@ public class TaskTest {
 
 	// Check null description
 	try {
-	    Task task = new Task(0, null, new User("user"), 60, 5, new ArrayList<Task>(), null);
+	    task0 = new Task(0, null, new User("user"), 60, 5, new ArrayList<Task>(), null);
 	    fail("Task without description created!");
 	} catch (Exception e) {
 	}
 
 	// Check null user
 	try {
-	    Task task = new Task(0, "test", null, 60, 5, new ArrayList<Task>(), null);
+	    task0 = new Task(0, "test", null, 60, 5, new ArrayList<Task>(), null);
 	    fail("Task without user created!");
 	} catch (Exception e) {
 	}

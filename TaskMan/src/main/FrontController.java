@@ -95,4 +95,8 @@ public class FrontController {
 	public List<User> getUsers() {
 	    return taskMan.getUsers();
 	}
+	
+	public void addUser(User user) throws Exception {
+	    taskMan.addUser(user);
+	}
 }
