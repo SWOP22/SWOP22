@@ -29,8 +29,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import exceptions.InvalidProjectDataException;
-import exceptions.InvalidTaskDataException;
-import exceptions.InvalidTaskUpdateDataException;
 import data.ProjectData;
 import data.TaskData;
 import data.TaskUpdateData;

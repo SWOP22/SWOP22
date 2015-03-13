@@ -238,9 +238,14 @@ public class Project implements TimeObserver {
 	 * @param tUData
 	 * 				the TaskUpdateData containing the task that needs to be updated, a new start date, a new end date
 	 * 				and a new status.
+	 * @throws Exception 
 	 */
-	public void taskStatusUpdate(TaskUpdateData tUData) {
-		//Task.updateTask(tUData);
+	public void taskStatusUpdate(TaskUpdateData tUData) throws Exception {
+		if(tUData.getTask()!=null){
+			tUData.getTask().updateTask(tUData);
+		} else {
+			throw new Exception("Can't update a task that doesn't exist.");
+		}
 	}
 	
 	/**

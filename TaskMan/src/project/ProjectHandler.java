@@ -8,7 +8,6 @@ import data.ProjectData;
 import data.TaskData;
 import data.TaskUpdateData;
 import exceptions.InvalidProjectDataException;
-import exceptions.InvalidTaskDataException;
 
 public class ProjectHandler {
 	private List<Project> allProjects;
@@ -47,10 +46,10 @@ public class ProjectHandler {
 	}
 	
 	public void taskStatusUpdate(TaskUpdateData tUData) throws Exception {
-		if(tUData.getTask()!=null){
-			tUData.getTask().updateTask(tUData);
+		if(tUData.getProject()!=null){
+			tUData.getProject().taskStatusUpdate(tUData);
 		} else {
-			throw new Exception("Can't update a task that doesn't exist.");
+			throw new Exception("Can't update a task in a project that doesn't exist.");
 		}
 	}
 	

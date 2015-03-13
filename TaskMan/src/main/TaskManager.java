@@ -13,7 +13,6 @@ import data.ProjectData;
 import data.TaskData;
 import data.TaskUpdateData;
 import exceptions.InvalidProjectDataException;
-import exceptions.InvalidTaskDataException;
 
 public class TaskManager {
 
