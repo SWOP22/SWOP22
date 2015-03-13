@@ -361,7 +361,7 @@ public class MainUI extends JFrame {
 				try {
 					fc.createProject(pData);
 				} catch (InvalidProjectDataException e1) {
-					JOptionPane.showMessageDialog(null, e.toString(), "Error",
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -380,7 +380,7 @@ public class MainUI extends JFrame {
 					try {
 						fc.createTask(tData);
 					} catch (InvalidTaskDataException e1) {
-						JOptionPane.showMessageDialog(null, e.toString(), "Error",
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
                                 JOptionPane.ERROR_MESSAGE);
 					}
 				} else {
@@ -404,7 +404,7 @@ public class MainUI extends JFrame {
 					try {
 						fc.taskStatusUpdate(tUData);
 					} catch (InvalidTaskUpdateDataException e1) {
-						JOptionPane.showMessageDialog(null, e.toString(), "Error",
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
                                 JOptionPane.ERROR_MESSAGE);
 					}
 				} else {
@@ -421,7 +421,7 @@ public class MainUI extends JFrame {
 				try {
 					fc.advanceTime(time);
 				} catch (InvalidTimeStampException e1) {
-					JOptionPane.showMessageDialog(null, e.toString(), "Error",
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
 				}
 			}
