@@ -24,6 +24,7 @@ public class TaskDetailsUI extends JFrame {
 	 */
 	public TaskDetailsUI(Task task) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setVisible(true);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
