@@ -229,7 +229,7 @@ public class Project implements TimeObserver {
 	 * 				the ID of a task in an int.
 	 */
 	public int getTaskID() {
-		return allTasks.size() - 1;
+		return allTasks.size();
 	}
 	
 	/**

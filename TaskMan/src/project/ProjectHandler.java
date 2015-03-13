@@ -34,7 +34,7 @@ public class ProjectHandler {
 	}
 	
 	public int getProjectID() {
-		return allProjects.size() - 1;
+		return allProjects.size();
 	}
 	
 	public void createTask(TaskData tData) throws InvalidTaskDataException {
