@@ -23,4 +23,8 @@ public class Finished implements Status {
     public String getStatus() {
 	return "finished";
     }
+    
+    public String toString(){
+    	return getStatus();
+    }
 }

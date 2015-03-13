@@ -26,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
 import exceptions.InvalidProjectDataException;
 import exceptions.InvalidTaskDataException;
@@ -83,6 +84,8 @@ public class MainUI extends JFrame {
 	private JComboBox<Task> comboBox_task_alternate;
 	private DefaultComboBoxModel<Status> statusListModel;
 	private JComboBox<Status> comboBox_status;
+	private JTextField textField_user;
+	private JButton btnAddUser;
 	/**
 	 * Launch the application.
 	 */
@@ -171,10 +174,12 @@ public class MainUI extends JFrame {
 		
 		taskListModel = new DefaultListModel<Task>();
 		taskList = new JList<Task>(taskListModel);
+		taskList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane_1.setViewportView(taskList);
 		
 		projectListModel = new DefaultListModel<Project>();
 		projectList = new JList<Project>(projectListModel);
+		projectList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		scrollPane.setViewportView(projectList);
 		contentPane.setLayout(null);
 		contentPane.add(btnShowProjects);
@@ -322,6 +327,15 @@ public class MainUI extends JFrame {
 		contentPane.add(textField_project_due);
 		textField_project_due.setColumns(10);
 		
+		btnAddUser = new JButton("add user");
+		btnAddUser.setBounds(409, 478, 89, 23);
+		contentPane.add(btnAddUser);
+		
+		textField_user = new JTextField();
+		textField_user.setBounds(512, 479, 86, 20);
+		contentPane.add(textField_user);
+		textField_user.setColumns(10);
+		
 	}
 	
 	/**
@@ -467,6 +481,16 @@ public class MainUI extends JFrame {
 					fc.advanceTime(time);
 				} catch (InvalidTimeStampException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		});
+		btnAddUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					fc.addUser(new User(textField_user.getText()));
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
 				}
 			}

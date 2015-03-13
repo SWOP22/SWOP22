@@ -24,4 +24,8 @@ public class Ongoing implements Status {
     public String getStatus() {
 	return "ongoing";
     }
+    
+    public String toString(){
+    	return getStatus();
+    }
 }

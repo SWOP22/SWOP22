@@ -23,4 +23,8 @@ public class Failed implements Status {
     public String getStatus() {
 	return "failed";
     }
+    
+    public String toString(){
+    	return getStatus();
+    }
 }

@@ -35,6 +35,7 @@ public class TaskDetailsUI extends JFrame {
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
 		textArea = new JTextArea();
+		textArea.setEditable(false);
 		scrollPane.setViewportView(textArea);
 		
 		JLabel lblTaskDetails = new JLabel("Task details");

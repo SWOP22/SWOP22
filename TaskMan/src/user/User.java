@@ -17,4 +17,8 @@ public class User {
     public String getName() {
 	return this.name;
     }
+    
+    public String toString(){
+    	return name;
+    }
 }
