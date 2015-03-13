@@ -177,7 +177,8 @@ public class TaskManInitFileChecker extends StreamTokenizer {
 				expectLabel("alternativeFor");
 				if (ttype == TT_NUMBER){
 					alternativeFor = expectInt();
-					tData.setAlternateFor(getTask(currentProject.getProjectID(),alternativeFor));
+					// Inconsistentie!!! kan geen taak alternate maken voor een taak die nog moet falen.
+					//tData.setAlternateFor(getTask(currentProject.getProjectID(),alternativeFor));
 				}
 				List<Integer> prerequisiteTasks = new ArrayList<>();
 				List<Task> preTasks = new ArrayList<Task>();
@@ -198,7 +199,10 @@ public class TaskManInitFileChecker extends StreamTokenizer {
 					status = new Finished();
 				} else if (isWord("failed")) {
 					nextToken();
-					status = new Failed();
+					// Inconsistentie!!! kan geen taak falen die nog open dependencies heeft
+					//status = new Failed();
+					LocalDateTime startTime = expectDateField("startTime");
+					LocalDateTime endTime = expectDateField("endTime");
 				}
 				if (!status.ongoing()) {
 					LocalDateTime startTime = expectDateField("startTime");
@@ -214,6 +218,7 @@ public class TaskManInitFileChecker extends StreamTokenizer {
 				throw new InvalidProjectDataException("Project ID's don't match.");
 			}
 		}
+		System.out.println(ttype);
 		if (ttype != TT_EOF)
 			error("End of file or '-' expected");
 	}
