@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import time.WorkTime;
 import user.User;
 import data.TaskData;
 import data.TaskUpdateData;
@@ -91,7 +92,7 @@ public class Task {
 	this.dependencyTasks = new ArrayList<Task>(dependencyTasks);
 	this.alternateFor = alternateFor;
     }
-	
+
     /**
      * Constructor for the task class that uses a TaskData object to initialize its data. Uses the
      * other constructor to avoid double code. The given TaskData object can not be null!
@@ -225,14 +226,19 @@ public class Task {
     }
 
     /**
-     * @return the estimated time this task should be finished, null if the task hasn't started
+     * @return the estimated time this task should be finished, null if the task hasn't started, the
+     *         exact end time if the task is finished or has failed
      */
     public LocalDateTime getEstimatedEndTime() {
-	/*
-	 * if (timeSpan.getStartTime() == null) { return null; }
-	 */
-	// TODO: calculate estimated end time with WorkTime class
-	return null;
+	if (timeSpan.getStartTime() == null) {
+	    return null;
+	}
+	if (!ongoing()) {
+	    return timeSpan.getEndTime();
+	} else {
+	    WorkTime workTime = new WorkTime();
+	    return workTime.getEstimatedEndTime(timeSpan.getStartTime(), estimatedDuration);
+	}
     }
 
     /**

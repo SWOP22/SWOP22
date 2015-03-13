@@ -584,5 +584,39 @@ public class TaskTest {
 
 	assertEquals("Task 4 ongoing: test, 0 minutes, 5% margin, depends on task 3",
 		task4.toString());
+
+	// test getEstimatedEndTime()
+	// test ongoing task that hasn't started
+	Task task5 = null;
+	try {
+	    task5 = new Task(5, "task 5", new User("user5"), 630, 20, null, null);
+	} catch (Exception e) {
+	    fail("Could not create valid user!");
+	}
+
+	assertNotEquals(null, task5);
+	assertEquals(null, task5.getEstimatedEndTime());
+
+	// test finished task
+	assertEquals(task3.getTimeSpan().getEndTime(), task3.getEstimatedEndTime());
+
+	// test failed task
+	assertEquals(task2.getTimeSpan().getEndTime(), task2.getEstimatedEndTime());
+
+	// test ongoing task with start time
+	taskUpdateData = new TaskUpdateData(task5, null);
+	taskUpdateData.setStartTime(LocalDateTime.of(2015, 1, 2, 15, 00));
+
+	try {
+	    task5.updateTask(taskUpdateData);
+	} catch (Exception e) {
+	    fail("Rejected valid start time!");
+	}
+	
+	assertEquals(LocalDateTime.of(2015, 1, 2, 15, 00), task5.getTimeSpan().getStartTime());
+
+	// task starts at friday 15u00, estimated duration 630 minutes = 10 hours 30 minutes,
+	// so the task should end at Tuesday 9u30
+	assertEquals(LocalDateTime.of(2015, 1, 6, 9, 30), task5.getEstimatedEndTime());
     }
 }
