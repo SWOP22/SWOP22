@@ -14,23 +14,7 @@ public class UserManager {
      * Constructor for the UserManager class.
      */
     public UserManager() {
-	users = new ArrayList<User>();
-	addTeam();
-    }
-    
-    /**
-     * Add our names to the user list;
-     */
-    private void addTeam(){
-    	try {
-			users.add(new User("Dries"));
-			users.add(new User("Joren"));
-			users.add(new User("Mika"));
-			users.add(new User("Vincent"));
-		} catch (Exception e) {
-			//Can never fail.
-			e.printStackTrace();
-		}
+    	users = new ArrayList<User>();
     }
     
     /**

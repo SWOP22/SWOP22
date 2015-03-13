@@ -115,6 +115,14 @@ public class MainUI extends JFrame {
 		    fc = new FrontController(LocalDateTime.of(2014, 1, 1, 8, 0));
 		} catch (Exception e) {
 		    System.out.println("Could not initialize the front controller!");
+		}	
+		try {
+			fc.addUser(new User("Dries"));
+			fc.addUser(new User("Joren"));
+			fc.addUser(new User("Mika"));
+			fc.addUser(new User("Vincent"));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		ArrayList<Status> statuses = new ArrayList<Status>();
 		statuses.add(new Ongoing());
