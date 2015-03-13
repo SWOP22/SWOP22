@@ -331,7 +331,8 @@ public class TaskTest {
 	}
 
 	// Check if it accepts TaskUpdateData for another task
-	TaskUpdateData taskUpdateData = new TaskUpdateData(task0);
+	// project may be null to test task class
+	TaskUpdateData taskUpdateData = new TaskUpdateData(task0, null);
 
 	try {
 	    task2.updateTask(taskUpdateData);
@@ -340,7 +341,7 @@ public class TaskTest {
 	}
 
 	// Now with the correct task
-	taskUpdateData = new TaskUpdateData(task2);
+	taskUpdateData = new TaskUpdateData(task2, null);
 
 	try {
 	    task2.updateTask(taskUpdateData);
@@ -360,7 +361,7 @@ public class TaskTest {
 	assertEquals(LocalDateTime.of(2015, 1, 1, 12, 0), task2.getTimeSpan().getStartTime());
 
 	// Update end time without updating status to finished/failed
-	taskUpdateData = new TaskUpdateData(task2);
+	taskUpdateData = new TaskUpdateData(task2, null);
 	taskUpdateData.setEndTime(LocalDateTime.of(2015, 1, 1, 13, 0));
 
 	try {
@@ -370,7 +371,7 @@ public class TaskTest {
 	}
 
 	// Update status to finished without setting end time
-	taskUpdateData = new TaskUpdateData(task2);
+	taskUpdateData = new TaskUpdateData(task2, null);
 	taskUpdateData.setStatus(new Finished());
 
 	try {
@@ -380,7 +381,7 @@ public class TaskTest {
 	}
 
 	// Update status to failed without setting end time
-	taskUpdateData = new TaskUpdateData(task2);
+	taskUpdateData = new TaskUpdateData(task2, null);
 	taskUpdateData.setStatus(new Failed());
 
 	try {
@@ -396,7 +397,7 @@ public class TaskTest {
 	    fail("Failed to create task with valid arguments!");
 	}
 
-	taskUpdateData = new TaskUpdateData(task2);
+	taskUpdateData = new TaskUpdateData(task2, null);
 	taskUpdateData.setEndTime(LocalDateTime.of(2015, 1, 1, 13, 0));
 	taskUpdateData.setStatus(new Finished());
 
@@ -407,7 +408,7 @@ public class TaskTest {
 	}
 
 	// Update end time and status to finished, for a task that with a start time
-	taskUpdateData = new TaskUpdateData(task2);
+	taskUpdateData = new TaskUpdateData(task2, null);
 	taskUpdateData.setStartTime(LocalDateTime.of(2015, 1, 1, 12, 0));
 	taskUpdateData.setEndTime(LocalDateTime.of(2015, 1, 1, 13, 0));
 	taskUpdateData.setStatus(new Finished());
@@ -434,7 +435,7 @@ public class TaskTest {
 	    fail("Failed to create task with valid arguments!");
 	}
 
-	taskUpdateData = new TaskUpdateData(task2);
+	taskUpdateData = new TaskUpdateData(task2, null);
 	taskUpdateData.setStartTime(LocalDateTime.of(2015, 1, 1, 12, 0));
 	taskUpdateData.setEndTime(LocalDateTime.of(2015, 1, 1, 13, 0));
 	taskUpdateData.setStatus(new Ongoing());
@@ -446,7 +447,7 @@ public class TaskTest {
 	}
 
 	// Update end time and status to failed, for a task that with a start time
-	taskUpdateData = new TaskUpdateData(task2);
+	taskUpdateData = new TaskUpdateData(task2, null);
 	taskUpdateData.setStartTime(LocalDateTime.of(2015, 1, 1, 12, 0));
 	taskUpdateData.setEndTime(LocalDateTime.of(2015, 1, 1, 13, 0));
 	taskUpdateData.setStatus(new Failed());
@@ -496,7 +497,7 @@ public class TaskTest {
 	}
 
 	// Try starting task4 when its dependency task3 hasn't ended
-	taskUpdateData = new TaskUpdateData(task4);
+	taskUpdateData = new TaskUpdateData(task4, null);
 	taskUpdateData.setStartTime(LocalDateTime.of(2015, 1, 1, 12, 0));
 
 	try {
@@ -505,7 +506,7 @@ public class TaskTest {
 	} catch (Exception e) {
 	}
 
-	taskUpdateData = new TaskUpdateData(task3);
+	taskUpdateData = new TaskUpdateData(task3, null);
 	taskUpdateData.setStartTime(LocalDateTime.of(2015, 1, 1, 12, 0));
 	taskUpdateData.setEndTime(LocalDateTime.of(2015, 1, 1, 13, 0));
 	taskUpdateData.setStatus(new Finished());
@@ -517,7 +518,7 @@ public class TaskTest {
 	}
 
 	// Try starting task4 with a start time before the end time of its dependency
-	taskUpdateData = new TaskUpdateData(task4);
+	taskUpdateData = new TaskUpdateData(task4, null);
 	taskUpdateData.setStartTime(LocalDateTime.of(2015, 1, 1, 12, 30));
 
 	try {
@@ -527,7 +528,7 @@ public class TaskTest {
 	}
 
 	// Try starting task4 with a valid start time
-	taskUpdateData = new TaskUpdateData(task4);
+	taskUpdateData = new TaskUpdateData(task4, null);
 	taskUpdateData.setStartTime(LocalDateTime.of(2015, 1, 1, 13, 00));
 
 	try {
