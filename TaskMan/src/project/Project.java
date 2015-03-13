@@ -27,7 +27,7 @@ import time.TimeObserver;
  */
 public class Project implements TimeObserver {
 	
-	private int projectID;
+	private int ID;
 	private String name;
 	private String description;
 	private LocalDateTime creationTime;
@@ -38,22 +38,22 @@ public class Project implements TimeObserver {
 	/**
 	 * Constructs a Project with an ID and ProjectData.
 	 * The ProjectData is name, description, creation date and due date.
-	 * @param projectID
+	 * @param pID
 	 * 				An ID is assigned by the ProjectHandler depending on how much projects exist.
 	 * @param pData
 	 * 				ProjectData consists of a name, description, creation date and due date.
 	 * @throws InvalidProjectDataException
 	 * 				Throws an InvalidProjectDataException when the given data is not correct.
 	 */
-	public Project(int projectID, ProjectData pData) throws InvalidProjectDataException {
+	public Project(int pID, ProjectData pData) throws InvalidProjectDataException {
 		String pName = pData.getName();
 		String pDescription = pData.getDescription();
 		LocalDateTime pCreationTime = pData.getCreationTime();
 		LocalDateTime pDueTime = pData.getDueTime();
 		
-		allFieldChecks(pName, pDescription, pCreationTime, pDueTime);
+		allFieldChecks(pID, pName, pDescription, pCreationTime, pDueTime);
 		
-		setProjectID(projectID);
+		setProjectID(pID);
 		setName(pName);
 		setDescription(pDescription);
 		setCreationTime(pCreationTime);
@@ -68,7 +68,7 @@ public class Project implements TimeObserver {
 	 * 				the project ID in an int.
 	 */
 	public int getProjectID() {
-		return projectID;
+		return ID;
 	}
 	
 	/**
@@ -76,8 +76,8 @@ public class Project implements TimeObserver {
 	 * @param projectID
 	 * 				the given ProjectID generated in the ProjectHandler
 	 */
-	public void setProjectID(int projectID) {
-		this.projectID = projectID;
+	public void setProjectID(int ID) {
+		this.ID = ID;
 	}
 	
 	/**
@@ -236,6 +236,8 @@ public class Project implements TimeObserver {
 	
 	/**
 	 * Runs all the field checks.
+	 * @param projectID
+	 * 				the ID of the project.
 	 * @param name
 	 * 				the name of the project.
 	 * @param description
@@ -247,12 +249,18 @@ public class Project implements TimeObserver {
 	 * @throws InvalidProjectDataException
 	 * 				throws an InvalidProjectDataException if the given data is not correct for a certain field.
 	 */
-	public void allFieldChecks(String name, String description, LocalDateTime creationTime, LocalDateTime dueTime) throws InvalidProjectDataException {
+	public void allFieldChecks(int ID, String name, String description, LocalDateTime creationTime, LocalDateTime dueTime) throws InvalidProjectDataException {
+		checkID(ID);
 		checkName(name);
 		checkDescription(description);
 		checkCreationTime(creationTime);
 		checkDueTime(dueTime);
 		checkBothDates(creationTime, dueTime);
+	}
+	
+	public void checkID(int ID) throws InvalidProjectDataException {
+		if(ID < 0)
+			throw new InvalidProjectDataException("The ID cannot be negative.");
 	}
 	
 	/**
@@ -315,6 +323,11 @@ public class Project implements TimeObserver {
 	public void checkBothDates(LocalDateTime creationTime, LocalDateTime dueTime) throws InvalidProjectDataException {
 		if(creationTime.compareTo(dueTime) < 0)
 			throw new InvalidProjectDataException("The due date cannot be before the creation date.");
+	}
+	
+	public void checkAllTasks(Task task) throws InvalidProjectDataException {
+		if(task == null)
+			throw new InvalidProjectDataException("The task added to the list cannot be null.");
 	}
 	
 	/*
