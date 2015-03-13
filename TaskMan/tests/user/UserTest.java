@@ -32,6 +32,7 @@ public class UserTest {
 
 	if (user != null) {
 	    assertEquals("TestUser", user.getName());
+	    assertEquals("TestUser", user.toString());
 	}
     }
 }

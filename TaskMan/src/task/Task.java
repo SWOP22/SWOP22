@@ -236,8 +236,7 @@ public class Task {
 	if (!ongoing()) {
 	    return timeSpan.getEndTime();
 	} else {
-	    WorkTime workTime = new WorkTime();
-	    return workTime.getEstimatedEndTime(timeSpan.getStartTime(), estimatedDuration);
+	    return WorkTime.getEstimatedEndTime(timeSpan.getStartTime(), estimatedDuration);
 	}
     }
 

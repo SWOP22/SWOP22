@@ -1,85 +1,41 @@
 package time;
 
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
+/**
+ * The WorkTime class provides a method to calculate the estimated end time of a task
+ */
 public class WorkTime {
-	
-	private int startHour = 8;
-	private int endHour = 16;
-	LocalDateTime estimatedEndTime;
-	
-	//Checks if the given day is during the weekends or not
-	//If the day is not in the weekend then it'll pass to another constructor
-	public LocalDateTime getEstimatedEndTime(LocalDateTime startDayHour, Integer EstimatedMinutes) {
-		DayOfWeek weekDay = startDayHour.getDayOfWeek();
-	
-		Integer EstimatedHours = (int) Math.floor(EstimatedMinutes / 60);
-		EstimatedMinutes = EstimatedMinutes % 60;
+    // starting hour of a work day
+    private static int startHour = 8;
+    // ending hour of a work day
+    private static int endHour = 16;
 
-		if (weekDay.toString() != "SATURDAY" && weekDay.toString() != "SUNDAY")
-		{
-			estimatedEndTime = WorkHours(startDayHour, EstimatedHours, EstimatedMinutes);
-		}
-		else if (weekDay.toString() == "SATURDAY") {
-			weekDay.plus(2);
-		}
-		else {
-			weekDay.plus(1);
-		}
-		return estimatedEndTime;
+    public static LocalDateTime getEstimatedEndTime(LocalDateTime startTime, int estimatedDuration) {
+	if (startTime == null) {
+	    return null;
 	}
-	
-	public LocalDateTime WorkHours(LocalDateTime startDayHour, Integer estimatedHours, Integer estimatedMinutes) {
-		int workingHours = startDayHour.getHour();
-		int restTime = (workingHours + estimatedHours) -  endHour;
-		
-		if (restTime <= 0) {
-			return startDayHour.plusHours(estimatedHours).plusMinutes(estimatedMinutes);
+	LocalDateTime estimatedEndTime = startTime;
+
+	for (int i = 0; i < estimatedDuration; i++) {
+	    if (estimatedEndTime.getDayOfWeek().name().toUpperCase() == "SATURDAY"
+		    || estimatedEndTime.getDayOfWeek().name().toUpperCase() == "SUNDAY") {
+		while (!(estimatedEndTime.getDayOfWeek().name().toUpperCase() == "MONDAY" && estimatedEndTime
+			.getHour() == startHour)) {
+		    estimatedEndTime = estimatedEndTime.plusDays(1);
+		    estimatedEndTime = estimatedEndTime.withHour(startHour);
 		}
-		else {
-			startDayHour.plusDays(1);
-			getEstimatedEndTime(startDayHour, (restTime*60) + estimatedMinutes);
-			return null;
-		}
-	}
-	
-//	public int getHoursBetween(LocalDateTime begin, LocalDateTime end) {
-//		DayOfWeek beginDay = begin.getDayOfWeek();
-//		DayOfWeek endDay = end.getDayOfWeek();
-//		int hours = 0;
-//		
-//		if (begin.getHour() >= getEndHour()) {
-//			beginDay.plus(1);
-//		}
-//		
-//		if (beginDay.toString() != "SATURDAY" && beginDay.toString() != "SUNDAY")
-//		{
-//			hours += 8;
-//		}
-//		else if (weekDay.toString() == "SATURDAY") {
-//			weekDay.plus(2);
-//		}
-//		else {
-//			weekDay.plus(1);
-//		}
-//		
-//		return hours;
-//	}
-	
-	public int getStartHour() {
-		return startHour;
+	    }
+	    if (estimatedEndTime.getHour() < startHour) {
+		estimatedEndTime = estimatedEndTime.withHour(startHour);
+	    }
+	    if (estimatedEndTime.getHour() > (endHour - 1)) {
+		estimatedEndTime = estimatedEndTime.plusDays(1);
+		estimatedEndTime = estimatedEndTime.withHour(startHour);
+	    }
+	    estimatedEndTime = estimatedEndTime.plusMinutes(1);
 	}
 
-	public void setStartHour(int startHour) {
-		this.startHour = startHour;
-	}
-
-	public int getEndHour() {
-		return endHour;
-	}
-
-	public void setEndHour(int endHour) {
-		this.endHour = endHour;
-	}
+	return estimatedEndTime;
+    }
 }
