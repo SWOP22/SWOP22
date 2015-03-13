@@ -7,16 +7,19 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import main.FrontController;
+import main.TaskManInitFileChecker;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.FileReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -50,7 +53,7 @@ public class MainUI extends JFrame {
 	private JPanel contentPane;
 	
 	private DateTimeFormatter formatter;
-	private FrontController fc;
+	private static FrontController fc;
 	private JButton btnShowProjects;
 	private JButton btnCreateProject;
 	private JButton btnCreateTask;
@@ -88,9 +91,11 @@ public class MainUI extends JFrame {
 			public void run() {
 				try {
 					MainUI frame = new MainUI();
+					new TaskManInitFileChecker(new FileReader("input.tman"),fc).checkFile();
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
