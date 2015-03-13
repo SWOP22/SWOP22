@@ -218,7 +218,6 @@ public class TaskManInitFileChecker extends StreamTokenizer {
 				throw new InvalidProjectDataException("Project ID's don't match.");
 			}
 		}
-		System.out.println(ttype);
 		if (ttype != TT_EOF)
 			error("End of file or '-' expected");
 	}
