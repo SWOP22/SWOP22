@@ -1,19 +1,8 @@
 package gui;
 
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import main.FrontController;
-import main.TaskManInitFileChecker;
-
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileReader;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,17 +10,21 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
-import javax.swing.JList;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.border.EmptyBorder;
 
-import exceptions.InvalidProjectDataException;
-import data.ProjectData;
-import data.TaskData;
-import data.TaskUpdateData;
+import main.FrontController;
+import main.TaskManInitFileChecker;
 import project.Project;
 import task.Failed;
 import task.Finished;
@@ -40,8 +33,10 @@ import task.Status;
 import task.Task;
 import time.InvalidTimeStampException;
 import user.User;
-
-import javax.swing.JComboBox;
+import data.ProjectData;
+import data.TaskData;
+import data.TaskUpdateData;
+import exceptions.InvalidProjectDataException;
 
 public class MainUI extends JFrame {
 

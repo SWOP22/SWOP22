@@ -14,6 +14,10 @@ import task.Status;
 import task.Task;
 import time.TimeObserver;
 import time.WorkTime;
+import data.ProjectData;
+import data.TaskData;
+import data.TaskUpdateData;
+import exceptions.InvalidProjectDataException;
 
 /**
  * The Project class contains all the information about a project.
