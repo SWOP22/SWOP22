@@ -2,19 +2,26 @@ package project;
 
 import java.util.List;
 
+import time.TimeSubject;
 import data.ProjectData;
 import data.TaskData;
 import data.TaskUpdateData;
 import exceptions.InvalidProjectDataException;
+import exceptions.InvalidTaskDataException;
 
 public class ProjectHandler {
 	private Project project;
 	private List<Project> allProjects;
 	
-	public void createProject(ProjectData pData) throws InvalidProjectDataException {
+	public void createProject(ProjectData pData, TimeSubject timeSubject) throws InvalidProjectDataException {
 		checkExistingName(pData.getName());
 		project = new Project(getProjectID(), pData);
 		allProjects.add(project);
+		try {
+		    timeSubject.addTimeObserver(project);
+		} catch (Exception e) {
+		    throw new InvalidProjectDataException("Could not add project to list of time observers");
+		}
 	}
 	
 	public List<Project> getProjects() {
@@ -25,8 +32,12 @@ public class ProjectHandler {
 		return allProjects.size() - 1;
 	}
 	
-	public void createTask(TaskData tData) {
-		project.createTask(tData);
+	public void createTask(TaskData tData) throws InvalidTaskDataException {
+		try {
+		    project.createTask(tData);
+		} catch (Exception e) {
+		    throw new InvalidTaskDataException();
+		}
 	}
 	
 	public void taskStatusUpdate(TaskUpdateData tUData) {
@@ -37,7 +48,7 @@ public class ProjectHandler {
 	public void checkExistingName(String name) throws InvalidProjectDataException {
 		for(Project project : allProjects) {
 			if(name.equals(project.getName()))
-				throw new InvalidProjectDataException();
+				throw new InvalidProjectDataException("");
 		}
 	}
 }
