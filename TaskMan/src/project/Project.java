@@ -1,6 +1,7 @@
 package project;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ import task.Ongoing;
 import task.Status;
 import task.Task;
 import time.TimeObserver;
+import time.WorkTime;
 
 /**
  * The Project class contains all the information about a project.
@@ -344,10 +346,9 @@ public class Project implements TimeObserver {
 			throw new InvalidProjectDataException("The task added to the list cannot be null.");
 	}
 	
-	/*
-	public int checkDelay() {
+	public long checkDelay() {
 		int totalEstimatedDuration = 0;
-		int delay = 0;
+		long delay = 0;
 		LocalDateTime maxEnd = null;
 		LocalDateTime end = null;
 		LocalDateTime totalTasksTime = null;
@@ -371,19 +372,14 @@ public class Project implements TimeObserver {
 			totalTasksTime = getEndDate(maxEnd, totalEstimatedDuration);
 		
 		if(totalTasksTime.compareTo(dueTime) > 0)
-			delay = getHoursBetweenDates(dueTime, totalTasksTime);
+			delay = dueTime.until( totalTasksTime, ChronoUnit.HOURS);
 		
 		return delay;
 	}
 	
 	public LocalDateTime getEndDate(LocalDateTime startDate, int addHours) {
-		return WorkWeek.getEndTime(startDate, addHours);
+		return WorkTime.getEstimatedEndTime(startDate, addHours);
 	}
-	
-	public int getHoursBetween(LocalDateTime startDate, LocalDateTime endDate) {
-		return WorkWeek.getHoursBetween(startDate, endDate);
-	}
-	*/
 	
 	/**
 	 * Checks if the status of a project can be set to finished.
@@ -476,7 +472,6 @@ public class Project implements TimeObserver {
      */
     @Override
     public void update(LocalDateTime currentTime) {
-	// TODO Auto-generated method stub
-	
+    	checkDelay();
     }
 }
