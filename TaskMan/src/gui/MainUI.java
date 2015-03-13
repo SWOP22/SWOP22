@@ -97,7 +97,8 @@ public class MainUI extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Create the main user interface.
+	 * Initialize required elements.
 	 */
 	public MainUI() {
 		formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -121,6 +122,9 @@ public class MainUI extends JFrame {
 		}
 	}
 	
+	/**
+	 * Setup the user interface frames.
+	 */
 	public void setupFrames() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 550);
@@ -315,7 +319,14 @@ public class MainUI extends JFrame {
 		
 	}
 	
+	/**
+	 * Create interaction events.
+	 */
 	public void createEvents() {
+		
+		/**
+		 * Show all the projects in the system.
+		 */
 		btnShowProjects.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				projectListModel.clear();
@@ -327,6 +338,9 @@ public class MainUI extends JFrame {
 			}
 		});
 		
+		/**
+		 * Show all the tasks of the selected project.
+		 */
 		btnShowTasks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				taskListModel.clear();
@@ -340,6 +354,9 @@ public class MainUI extends JFrame {
 			}
 		});
 		
+		/**
+		 * Show the details of the selected task in a seperate window.
+		 */
 		btnShowTaskDetails.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Task task = taskList.getSelectedValue();
@@ -347,6 +364,9 @@ public class MainUI extends JFrame {
 			}
 		});
 		
+		/**
+		 * Create a new project with the entered information.
+		 */
 		btnCreateProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProjectData pData = fc.getProjectData();
@@ -370,6 +390,9 @@ public class MainUI extends JFrame {
 			}
 		});
 		
+		/**
+		 * Create a new task with the entered information.
+		 */
 		btnCreateTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(projectList.getSelectedValue() != null){
@@ -393,6 +416,9 @@ public class MainUI extends JFrame {
 			}
 		});
 		
+		/**
+		 * Update a task with the entered information.
+		 */
 		btnUpdateTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(taskList.getSelectedValue() != null){
@@ -420,6 +446,9 @@ public class MainUI extends JFrame {
 			}
 		});
 		
+		/**
+		 * Advance the time of the system to the entered time.
+		 */
 		btnAdvanceTime.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LocalDateTime time = null;
