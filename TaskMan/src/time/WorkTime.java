@@ -11,6 +11,11 @@ public class WorkTime {
     // ending hour of a work day
     private static int endHour = 16;
 
+    /**
+     * @param startTime
+     * @param estimatedDuration
+     * @return null if startTime == null, estimated end time otherwise
+     */
     public static LocalDateTime getEstimatedEndTime(LocalDateTime startTime, int estimatedDuration) {
 	if (startTime == null) {
 	    return null;

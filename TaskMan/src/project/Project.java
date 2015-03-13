@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import data.ProjectData;
-import data.TaskData;
-import data.TaskUpdateData;
-import exceptions.InvalidProjectDataException;
 import task.Ongoing;
 import task.Status;
 import task.Task;
 import time.TimeObserver;
+import data.ProjectData;
+import data.TaskData;
+import data.TaskUpdateData;
+import exceptions.InvalidProjectDataException;
 
 /**
  * The Project class contains all the information about a project.

@@ -1,9 +1,9 @@
 package task;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 import org.junit.Test;
 

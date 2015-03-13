@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import project.Project;
-import task.Failed;
 import task.Finished;
 import task.Ongoing;
 import task.Status;
