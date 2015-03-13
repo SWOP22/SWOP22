@@ -7,12 +7,11 @@ public class WorkTime {
 	
 	private int startHour = 8;
 	private int endHour = 16;
+	LocalDateTime estimatedEndTime;
 	
 	//Checks if the given day is during the weekends or not
 	//If the day is not in the weekend then it'll pass to another constructor
 	public LocalDateTime getEstimatedEndTime(LocalDateTime startDayHour, Integer EstimatedMinutes) {
-		LocalDateTime estimatedEndTime = null;
-		
 		DayOfWeek weekDay = startDayHour.getDayOfWeek();
 	
 		Integer EstimatedHours = (int) Math.floor(EstimatedMinutes / 60);
