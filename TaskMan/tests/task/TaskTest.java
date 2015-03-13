@@ -33,14 +33,14 @@ public class TaskTest {
 	// Check null description
 	try {
 	    Task task = new Task(0, null, new User("user"), 60, 5, new ArrayList<Task>(), null);
-	    fail("Task with without description created!");
+	    fail("Task without description created!");
 	} catch (Exception e) {
 	}
 
 	// Check null user
 	try {
 	    Task task = new Task(0, "test", null, 60, 5, new ArrayList<Task>(), null);
-	    fail("Task with without user created!");
+	    fail("Task without user created!");
 	} catch (Exception e) {
 	}
 

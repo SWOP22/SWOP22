@@ -62,7 +62,6 @@ public class Project implements TimeObserver {
 		this.allTasks = null;
 	}
 
-	//Getters and Setters
 	/**
 	 * Returns the project ID.
 	 * @return 
@@ -232,10 +231,9 @@ public class Project implements TimeObserver {
 	 * 				and a new status.
 	 */
 	public void taskStatusUpdate(TaskUpdateData tUData) {
-		//Task.setStatus(tUData);
+		//Task.updateTask(tUData);
 	}
 	
-	//Checks
 	/**
 	 * Runs all the field checks.
 	 * @param name
