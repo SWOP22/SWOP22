@@ -1,5 +1,6 @@
 package project;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import time.TimeSubject;
@@ -12,6 +13,10 @@ import exceptions.InvalidTaskDataException;
 public class ProjectHandler {
 	private Project project;
 	private List<Project> allProjects;
+	
+	public ProjectHandler() {
+		allProjects = new ArrayList<Project>();
+	}
 	
 	public void createProject(ProjectData pData, TimeSubject timeSubject) throws InvalidProjectDataException {
 		checkExistingName(pData.getName());
@@ -29,18 +34,16 @@ public class ProjectHandler {
 	}
 	
 	public int getProjectID() throws InvalidProjectDataException {
-		int projectID = allProjects.size() - 1;
+		int projectID = allProjects.size();
 		checkSameID(projectID);
 		return projectID;
-	public int getProjectID() {
-		return allProjects.size();
-	}
+}
 	
 	public void createTask(TaskData tData) throws InvalidTaskDataException {
 		try {
 		    project.createTask(tData);
 		} catch (Exception e) {
-		    throw new InvalidTaskDataException();
+		    throw new InvalidTaskDataException("Specify what is wrong in exception message and throw a meaningfull one.");
 		}
 	}
 	
