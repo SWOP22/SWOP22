@@ -313,7 +313,7 @@ public class Project implements TimeObserver {
 	 * 				throws an InvalidProjectDataException if the given due date is not correct.
 	 */
 	public void checkBothDates(LocalDateTime creationTime, LocalDateTime dueTime) throws InvalidProjectDataException {
-		if(creationTime.compareTo(dueTime) < 0)
+		if(creationTime.isAfter(dueTime))
 			throw new InvalidProjectDataException("The due date cannot be before the creation date.");
 	}
 	

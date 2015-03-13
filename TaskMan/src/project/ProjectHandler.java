@@ -41,7 +41,7 @@ public class ProjectHandler {
 		try {
 		    project.createTask(tData);
 		} catch (Exception e) {
-		    throw new InvalidTaskDataException();
+		    throw new InvalidTaskDataException("Specify what is wrong in exception message and throw a meaningfull one.");
 		}
 	}
 	

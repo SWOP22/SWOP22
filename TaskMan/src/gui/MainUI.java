@@ -14,9 +14,9 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -37,10 +37,8 @@ import task.Ongoing;
 import task.Status;
 import task.Task;
 import time.InvalidTimeStampException;
-import time.TimeStamp;
 import user.User;
 
-import javax.swing.JMenuItem;
 import javax.swing.JComboBox;
 
 public class MainUI extends JFrame {
@@ -51,6 +49,7 @@ public class MainUI extends JFrame {
 	private static final long serialVersionUID = 6669589071809532758L;
 	private JPanel contentPane;
 	
+	private DateTimeFormatter formatter;
 	private FrontController fc;
 	private JButton btnShowProjects;
 	private JButton btnCreateProject;
@@ -101,6 +100,7 @@ public class MainUI extends JFrame {
 	 * Create the frame.
 	 */
 	public MainUI() {
+		formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		setupFrames();
 		createEvents();
 		try {
@@ -352,12 +352,15 @@ public class MainUI extends JFrame {
 				ProjectData pData = fc.getProjectData();
 				pData.setName(textField_project_name.getText());
 				pData.setDescription(textField_project_description.getText());
-				//Has to be initialized
-				LocalDateTime creationTime = null;
-				pData.setCreationTime(creationTime);
-				//Has to be initialized
-				LocalDateTime dueTime = null;
-				pData.setDueTime(dueTime);
+				try {
+					LocalDateTime creationTime = LocalDateTime.parse(textField_project_start.getText(), formatter);
+					pData.setCreationTime(creationTime);
+					LocalDateTime dueTime = LocalDateTime.parse(textField_project_due.getText(), formatter);
+					pData.setDueTime(dueTime);
+				} catch (DateTimeParseException de){ 
+					JOptionPane.showMessageDialog(null, de.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+				}
 				try {
 					fc.createProject(pData);
 				} catch (InvalidProjectDataException e1) {
@@ -394,12 +397,15 @@ public class MainUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(taskList.getSelectedValue() != null){
 					TaskUpdateData tUData = fc.getTaskUpdateData(taskList.getSelectedValue());
-					//Has to be initialized
-					LocalDateTime startTime = null;
-					tUData.setStartTime(startTime);
-					//Has to be initialized
-					LocalDateTime endTime = null;
-					tUData.setEndTime(endTime);
+					try {
+						LocalDateTime startTime = LocalDateTime.parse(textField_start.getText(), formatter);
+						tUData.setStartTime(startTime);
+						LocalDateTime endTime = LocalDateTime.parse(textField_end.getText(), formatter);
+						tUData.setEndTime(endTime);
+					} catch (DateTimeParseException de) {
+						JOptionPane.showMessageDialog(null, de.getMessage(), "Error",
+	                            JOptionPane.ERROR_MESSAGE);
+					}
 					tUData.setStatus((Status) comboBox_status.getSelectedItem());
 					try {
 						fc.taskStatusUpdate(tUData);
@@ -416,8 +422,13 @@ public class MainUI extends JFrame {
 		
 		btnAdvanceTime.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Has to be initialized
 				LocalDateTime time = null;
+				try {
+					time = LocalDateTime.parse(textField_date.getText(), formatter);
+				} catch (DateTimeParseException de) {
+					JOptionPane.showMessageDialog(null, de.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+				}
 				try {
 					fc.advanceTime(time);
 				} catch (InvalidTimeStampException e1) {
