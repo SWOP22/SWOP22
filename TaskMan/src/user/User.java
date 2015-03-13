@@ -1,7 +1,8 @@
 package user;
 
 /**
- * Represents users who can perform tasks
+ * Represents users who can perform tasks. This class guarantees that its user objects have a name
+ * that is not empty.
  */
 public class User {
     private String name;

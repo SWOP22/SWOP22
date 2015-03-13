@@ -1,4 +1,4 @@
-package task;
+package user;
 
 import static org.junit.Assert.*;
 
