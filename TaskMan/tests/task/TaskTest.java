@@ -87,25 +87,15 @@ public class TaskTest {
 
 	// Check null description
 	try {
-<<<<<<< HEAD
 	    Task task = new Task(0, null, new User("user"), 60, 5, new ArrayList<Task>(), null);
 	    fail("Task without description created!");
-=======
-	    task0 = new Task(0, null, new User("user"), 60, 5, new ArrayList<Task>(), null);
-	    fail("Task with without description created!");
->>>>>>> origin/master
 	} catch (Exception e) {
 	}
 
 	// Check null user
 	try {
-<<<<<<< HEAD
 	    Task task = new Task(0, "test", null, 60, 5, new ArrayList<Task>(), null);
 	    fail("Task without user created!");
-=======
-	    task0 = new Task(0, "test", null, 60, 5, new ArrayList<Task>(), null);
-	    fail("Task with without user created!");
->>>>>>> origin/master
 	} catch (Exception e) {
 	}
 
