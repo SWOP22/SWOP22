@@ -91,7 +91,7 @@ public class MainUI extends JFrame {
 			public void run() {
 				try {
 					MainUI frame = new MainUI();
-					new TaskManInitFileChecker(new FileReader("input.tman"),fc).checkFile();
+					new TaskManInitFileChecker(new FileReader("/TaskMan/src/gui/input.tman"),fc).checkFile();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, e.getMessage(), "Error",

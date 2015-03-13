@@ -1,7 +1,6 @@
 package main;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StreamTokenizer;
@@ -11,8 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import project.Project;
+import task.Failed;
+import task.Finished;
+import task.Ongoing;
+import task.Status;
+import task.Task;
 import data.ProjectData;
 import data.TaskData;
+import data.TaskUpdateData;
 import exceptions.InvalidProjectDataException;
 import exceptions.InvalidTaskDataException;
 import exceptions.InvalidTaskUpdateDataException;
@@ -100,6 +105,27 @@ public class TaskManInitFileChecker extends StreamTokenizer {
 		expectChar(']');
 		return list;
 	}
+	/**
+	 * Get the task you want
+	 * System: project ids [0,...] task ids [0,...]
+	 * File: project ids [0,...] task ids [1,...]
+	 * @param pid
+	 * @param tid
+	 * @return
+	 */
+	private Task getTask(int pid, int tid){
+		Task task = null;
+		for(Project p : fc.getProjects()){
+			if(p.getProjectID() == pid){
+				for(Task t : p.getAllTasks()){
+					if(t.getTaskID() == tid-1){
+						task = t;
+					}
+				}
+			}
+		}
+		return task;
+	}
 	
 	public void checkFile() throws InvalidProjectDataException, InvalidTaskDataException, InvalidTaskUpdateDataException {
 		slashSlashComments(false);
@@ -109,6 +135,8 @@ public class TaskManInitFileChecker extends StreamTokenizer {
 		
 		nextToken();
 		expectLabel("projects");
+		
+		int taskCounter = 1;
 		
 		while (ttype == '-') {
 			expectChar('-');
@@ -128,10 +156,15 @@ public class TaskManInitFileChecker extends StreamTokenizer {
 			expectChar('-');
 			Project currentProject = null;
 			int project = expectIntField("project");
+			int lastProject = -1;
 			for(Project p : fc.getProjects()){
 				if(p.getProjectID() == project){
 					currentProject = p;
+					lastProject = project;
 				}
+			}
+			if(project != lastProject){
+				taskCounter = 1;
 			}
 			if(currentProject != null){
 				TaskData tData = fc.getTaskData(currentProject);
@@ -145,23 +178,37 @@ public class TaskManInitFileChecker extends StreamTokenizer {
 				expectLabel("alternativeFor");
 				if (ttype == TT_NUMBER)
 					alternativeFor = expectInt();
+				tData.setAlternateFor(getTask(currentProject.getProjectID(),alternativeFor));
 				List<Integer> prerequisiteTasks = new ArrayList<>();
 				expectLabel("prerequisiteTasks");
 				if (ttype == '[')
 					prerequisiteTasks = expectIntList();
+				List<Task> preTasks = new ArrayList<Task>();
+				for(int i : prerequisiteTasks){
+					preTasks.add(getTask(currentProject.getProjectID(),i));
+				}
+				tData.setDependencyTasks(preTasks);
+				fc.createTask(tData);
+				Task currentTask = getTask(currentProject.getProjectID(),taskCounter);
 				expectLabel("status");
-				TaskStatus status = TaskStatus.ONGOING;
+				Status status = new Ongoing();
 				if (isWord("finished")) {
 					nextToken();
-					status = TaskStatus.FINISHED;
+					status = new Finished();
 				} else if (isWord("failed")) {
 					nextToken();
-					status = TaskStatus.FAILED;
+					status = new Failed();
 				}
-				if (status != TaskStatus.ONGOING) {
+				if (!status.ongoing()) {
 					LocalDateTime startTime = expectDateField("startTime");
 					LocalDateTime endTime = expectDateField("endTime");
+					TaskUpdateData tud = fc.getTaskUpdateData(getTask(currentProject.getProjectID(),taskCounter));
+					tud.setStatus(status);
+					tud.setStartTime(startTime);
+					tud.setEndTime(endTime);
+					fc.taskStatusUpdate(tud);
 				}
+				taskCounter++;
 			} else {
 				throw new InvalidProjectDataException("Project ID's don't match.");
 			}
