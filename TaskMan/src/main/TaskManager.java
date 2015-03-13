@@ -55,4 +55,9 @@ public class TaskManager {
 	
     }
 
+    public void addUser(User user) throws Exception {
+	userManager.addUser(user);
+	
+    }
+
 }
