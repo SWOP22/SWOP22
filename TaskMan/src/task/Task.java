@@ -3,7 +3,9 @@ package task;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import data.TaskData;
 import data.TaskUpdateData;
@@ -17,7 +19,10 @@ import data.TaskUpdateData;
  * 
  * Because we wanted the minimize the coupling between the Project and the Task classes, the
  * association between them is unidirectional. Tasks have no information about the projects that own
- * them.
+ * them and the other tasks of the project that owns them. This way, tasks can not guarantee that
+ * their dependencies are tasks of the same project and, because they can not check for alternate
+ * tasks if one of their dependencies has failed, they can not determine their availability
+ * themselves.
  */
 public class Task {
     private int taskID;
@@ -81,7 +86,8 @@ public class Task {
 	this.user = user;
 	this.estimatedDuration = estimatedDuration;
 	this.acceptableDeviation = acceptableDeviation;
-	this.dependencyTasks = dependencyTasks;
+	// New list for data encapsulation
+	this.dependencyTasks = new ArrayList<Task>(dependencyTasks);
 	this.alternateFor = alternateFor;
     }
 
@@ -108,7 +114,8 @@ public class Task {
     /**
      * Method for updating the start time, the end time or the status. If the status gets set to
      * finished or failed, the end time must be set as well and if the end time gets set, the status
-     * must be set to finished or failed.
+     * must be set to finished or failed. The TaskUpdateData object can not be null and must relate
+     * to the same task. Other null values in the TaskUpdateData object are ignored.
      * 
      * @throws Exception
      *             if invalid update data or task.ongoing() == false
@@ -123,8 +130,10 @@ public class Task {
 	    throw new Exception("A task can not update another task!");
 	}
 
-	// the set method will perform all the necessary checks
-	setStartTime(updateData.getStartTime());
+	if (updateData.getStartTime() != null) {
+	    // the set method will perform all the necessary checks
+	    setStartTime(updateData.getStartTime());
+	}
 
 	// if the update data has an end time, it must have a finished/failed status
 	if (updateData.getEndTime() != null) {
@@ -142,7 +151,9 @@ public class Task {
 
 	// the set method guarantees that the status can not be changed to finished or failed,
 	// if the start or end time is not set
-	setStatus(updateData.getStatus());
+	if (updateData.getStatus() != null) {
+	    setStatus(updateData.getStatus());
+	}
     }
 
     /**
@@ -211,14 +222,14 @@ public class Task {
 	checkDuration(estimatedDuration);
 	this.estimatedDuration = estimatedDuration;
     }
-    
+
     /**
      * @return the estimated time this task should be finished, null if the task hasn't started
      */
     public LocalDateTime getEstimatedEndTime() {
-	if (timeSpan.getStartTime() == null) {
-	    return null;
-	}
+	/*
+	 * if (timeSpan.getStartTime() == null) { return null; }
+	 */
 	// TODO: calculate estimated end time with WorkTime class
 	return null;
     }
@@ -263,12 +274,20 @@ public class Task {
      */
     public void setDependencyTasks(List<Task> dependencyTasks) throws Exception {
 	checkOngoing();
+	if (timeSpan.getStartTime() != null) {
+	    throw new Exception(
+		    "Can not modify the dependency list of a task that has already started!");
+	}
 	if (dependencyTasks == null) {
 	    dependencyTasks = new ArrayList<Task>();
 	} else {
 	    checkDependencyTasks(dependencyTasks);
 	}
-	this.dependencyTasks = dependencyTasks;
+	// Create Set to delete doubles, use Set to create new List
+	Set<Task> uniqueDependencyTasks = new HashSet<Task>(dependencyTasks);
+	// The new List also ensures data encapsulation, the list can only be modified via Setters
+	// and not directly
+	this.dependencyTasks = new ArrayList<Task>(uniqueDependencyTasks);
     }
 
     /**
@@ -282,8 +301,14 @@ public class Task {
      */
     public void addDependencyTask(Task dependencyTask) throws Exception {
 	checkOngoing();
+	if (timeSpan.getStartTime() != null) {
+	    throw new Exception(
+		    "Can not modify the dependency list of a task that has already started!");
+	}
 	checkDependencyTask(dependencyTask);
-	this.dependencyTasks.add(dependencyTask);
+	if (!dependencyTasks.contains(dependencyTask)) {
+	    dependencyTasks.add(dependencyTask);
+	}
     }
 
     /**
@@ -391,8 +416,12 @@ public class Task {
      */
     @Override
     public String toString() {
-	String result = "Task " + taskID + " " + getStatus() + ": " + description + ", "
-		+ minutesToHoursAndMinutes() + ", " + acceptableDeviation + "% margin";
+	String estimatedHourMin = minutesToHoursAndMinutes();
+
+	String result = "Task " + taskID + " " + getStatus() + ": " + description + ", ";
+	result += (estimatedHourMin.equals("") ? "0 minutes, " : estimatedHourMin + ", ");
+	result += acceptableDeviation + "% margin";
+
 	for (Task task : dependencyTasks) {
 	    result += ", depends on task " + task.getTaskID();
 	}
@@ -410,8 +439,33 @@ public class Task {
      * @return the estimated hours and minutes to complete this task
      */
     private String minutesToHoursAndMinutes() {
+	int hours = (estimatedDuration / 60);
 	int minutes = estimatedDuration % 60;
-	return (estimatedDuration / 60) + " hours " + (minutes == 0 ? "" : minutes + " minutes");
+	String hourStr = "", minStr = "", result = "";
+
+	if (hours == 1) {
+	    hourStr = "1 hour";
+	} else if (hours > 1) {
+	    hourStr = hours + " hours";
+	}
+
+	if (minutes == 1) {
+	    minStr = "1 minute";
+	} else if (minutes > 1) {
+	    minStr = minutes + " minutes";
+	}
+
+	if (hourStr.equals("")) {
+	    result = minStr;
+	} else {
+	    if (minStr.equals("")) {
+		result = hourStr;
+	    } else {
+		result = hourStr + " " + minStr;
+	    }
+	}
+
+	return result;
     }
 
     // Private methods for consistency checking
