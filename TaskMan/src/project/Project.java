@@ -61,7 +61,15 @@ public class Project implements TimeObserver {
 		this.status = new Ongoing();
 		this.allTasks = null;
 	}
-
+	
+	/**
+	 * Returns a string representation of the project.
+	 */
+	public String toString(){
+		//TODO add time info depending on status/delay
+		return "Project " + name + ": " + status.getStatus();
+	}
+	
 	/**
 	 * Returns the project ID.
 	 * @return 

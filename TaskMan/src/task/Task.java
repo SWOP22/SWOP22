@@ -91,7 +91,7 @@ public class Task {
 	this.dependencyTasks = new ArrayList<Task>(dependencyTasks);
 	this.alternateFor = alternateFor;
     }
-
+	
     /**
      * Constructor for the task class that uses a TaskData object to initialize its data. Uses the
      * other constructor to avoid double code. The given TaskData object can not be null!
