@@ -1,5 +1,6 @@
 package project;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import time.TimeSubject;
@@ -12,6 +13,10 @@ import exceptions.InvalidTaskDataException;
 public class ProjectHandler {
 	private Project project;
 	private List<Project> allProjects;
+	
+	public ProjectHandler() {
+		allProjects = new ArrayList<Project>();
+	}
 	
 	public void createProject(ProjectData pData, TimeSubject timeSubject) throws InvalidProjectDataException {
 		checkExistingName(pData.getName());

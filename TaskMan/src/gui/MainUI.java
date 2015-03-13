@@ -144,10 +144,10 @@ public class MainUI extends JFrame {
 		scrollPane.setBounds(150, 30, 300, 190);
 		
 		JLabel lblProjects = new JLabel("Projects");
-		lblProjects.setBounds(150, 5, 39, 14);
+		lblProjects.setBounds(150, 5, 70, 14);
 		
 		JLabel lblTasks = new JLabel("Tasks");
-		lblTasks.setBounds(475, 5, 27, 14);
+		lblTasks.setBounds(475, 5, 59, 14);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(475, 30, 300, 190);
@@ -266,7 +266,7 @@ public class MainUI extends JFrame {
 		contentPane.add(comboBox_status);
 		
 		JLabel lblDependencies = new JLabel("dependencies");
-		lblDependencies.setBounds(520, 352, 70, 14);
+		lblDependencies.setBounds(512, 352, 78, 14);
 		contentPane.add(lblDependencies);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
