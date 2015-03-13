@@ -15,6 +15,7 @@ import task.Finished;
 import task.Ongoing;
 import task.Status;
 import task.Task;
+import user.User;
 import data.ProjectData;
 import data.TaskData;
 import data.TaskUpdateData;
@@ -127,7 +128,7 @@ public class TaskManInitFileChecker extends StreamTokenizer {
 		return task;
 	}
 	
-	public void checkFile() throws InvalidProjectDataException, InvalidTaskDataException, InvalidTaskUpdateDataException {
+	public void checkFile() throws Exception {
 		slashSlashComments(false);
 		slashStarComments(false);
 		ordinaryChar('/'); // otherwise "//" keeps treated as comments.
@@ -151,20 +152,20 @@ public class TaskManInitFileChecker extends StreamTokenizer {
 			pData.setDueTime(dueTime);
 			fc.createProject(pData);
 		}
+		int lastProject = -1;
 		expectLabel("tasks");
 		while (ttype == '-') {
 			expectChar('-');
 			Project currentProject = null;
 			int project = expectIntField("project");
-			int lastProject = -1;
 			for(Project p : fc.getProjects()){
 				if(p.getProjectID() == project){
 					currentProject = p;
-					lastProject = project;
 				}
 			}
 			if(project != lastProject){
 				taskCounter = 1;
+				lastProject = project;
 			}
 			if(currentProject != null){
 				TaskData tData = fc.getTaskData(currentProject);
@@ -176,20 +177,22 @@ public class TaskManInitFileChecker extends StreamTokenizer {
 				tData.setAcceptableDeviation(acceptableDeviation);
 				Integer alternativeFor = null;
 				expectLabel("alternativeFor");
-				if (ttype == TT_NUMBER)
+				if (ttype == TT_NUMBER){
 					alternativeFor = expectInt();
-				tData.setAlternateFor(getTask(currentProject.getProjectID(),alternativeFor));
-				List<Integer> prerequisiteTasks = new ArrayList<>();
-				expectLabel("prerequisiteTasks");
-				if (ttype == '[')
-					prerequisiteTasks = expectIntList();
-				List<Task> preTasks = new ArrayList<Task>();
-				for(int i : prerequisiteTasks){
-					preTasks.add(getTask(currentProject.getProjectID(),i));
+					tData.setAlternateFor(getTask(currentProject.getProjectID(),alternativeFor));
 				}
-				tData.setDependencyTasks(preTasks);
+				List<Integer> prerequisiteTasks = new ArrayList<>();
+				List<Task> preTasks = new ArrayList<Task>();
+				expectLabel("prerequisiteTasks");
+				if (ttype == '['){
+					prerequisiteTasks = expectIntList();
+					for(int i : prerequisiteTasks){
+						preTasks.add(getTask(currentProject.getProjectID(),i));
+					}
+					tData.setDependencyTasks(preTasks);
+				}
+				tData.setUser(new User("Admin"));
 				fc.createTask(tData);
-				Task currentTask = getTask(currentProject.getProjectID(),taskCounter);
 				expectLabel("status");
 				Status status = new Ongoing();
 				if (isWord("finished")) {
@@ -202,7 +205,7 @@ public class TaskManInitFileChecker extends StreamTokenizer {
 				if (!status.ongoing()) {
 					LocalDateTime startTime = expectDateField("startTime");
 					LocalDateTime endTime = expectDateField("endTime");
-					TaskUpdateData tud = fc.getTaskUpdateData(getTask(currentProject.getProjectID(),taskCounter));
+					TaskUpdateData tud = fc.getTaskUpdateData(getTask(currentProject.getProjectID(),taskCounter),currentProject);
 					tud.setStatus(status);
 					tud.setStartTime(startTime);
 					tud.setEndTime(endTime);

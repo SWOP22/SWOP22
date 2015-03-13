@@ -1,17 +1,21 @@
 package data;
 
 import java.time.LocalDateTime;
+
+import project.Project;
 import task.Status;
 import task.Task;
 
 public class TaskUpdateData {
     private Task task;
+    private Project project;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Status status;
 
-    public TaskUpdateData(Task task) {
+    public TaskUpdateData(Task task, Project project) {
 	this.task = task;
+	this.project = project;
     }
 
     public Task getTask() {

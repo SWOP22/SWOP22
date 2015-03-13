@@ -1,6 +1,7 @@
 package project;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import data.ProjectData;
@@ -59,7 +60,7 @@ public class Project implements TimeObserver {
 		setCreationTime(pCreationTime);
 		setDueTime(pDueTime);
 		this.status = new Ongoing();
-		this.allTasks = null;
+		this.allTasks = new ArrayList<Task>();
 	}
 	
 	/**

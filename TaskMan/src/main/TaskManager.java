@@ -38,11 +38,11 @@ public class TaskManager {
 	pH.createProject(pData, systemTime);
     }
 
-    public void createTask(TaskData tData) throws InvalidTaskDataException {
-	pH.createTask(tData);
+    public void createTask(TaskData tData) throws NullPointerException, Exception {
+    pH.createTask(tData);
     }
 
-    public void taskStatusUpdate(TaskUpdateData tUData) {
+    public void taskStatusUpdate(TaskUpdateData tUData) throws Exception {
 	pH.taskStatusUpdate(tUData);
     }
 

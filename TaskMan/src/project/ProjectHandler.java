@@ -11,7 +11,6 @@ import exceptions.InvalidProjectDataException;
 import exceptions.InvalidTaskDataException;
 
 public class ProjectHandler {
-	private Project project;
 	private List<Project> allProjects;
 	
 	public ProjectHandler() {
@@ -20,7 +19,7 @@ public class ProjectHandler {
 	
 	public void createProject(ProjectData pData, TimeSubject timeSubject) throws InvalidProjectDataException {
 		checkExistingName(pData.getName());
-		project = new Project(getProjectID(), pData);
+		Project project = new Project(getProjectID(), pData);
 		allProjects.add(project);
 		try {
 		    timeSubject.addTimeObserver(project);
@@ -37,16 +36,20 @@ public class ProjectHandler {
 		return allProjects.size();
 	}
 	
-	public void createTask(TaskData tData) throws InvalidTaskDataException {
-		try {
-		    project.createTask(tData);
-		} catch (Exception e) {
-		    throw new InvalidTaskDataException("Specify what is wrong in exception message and throw a meaningfull one.");
+	public void createTask(TaskData tData) throws NullPointerException, Exception {
+		if(tData.getProject()!= null){
+			tData.getProject().createTask(tData);
+		} else {
+			throw new Exception("Can't create tasks on projects that don't exist.");
 		}
 	}
 	
-	public void taskStatusUpdate(TaskUpdateData tUData) {
-		project.taskStatusUpdate(tUData);
+	public void taskStatusUpdate(TaskUpdateData tUData) throws Exception {
+		if(tUData.getTask()!=null){
+			tUData.getTask().updateTask(tUData);
+		} else {
+			throw new Exception("Can't update a task that doesn't exist.");
+		}
 	}
 	
 	//Checks

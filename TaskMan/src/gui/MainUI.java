@@ -91,7 +91,7 @@ public class MainUI extends JFrame {
 			public void run() {
 				try {
 					MainUI frame = new MainUI();
-					new TaskManInitFileChecker(new FileReader("/TaskMan/src/gui/input.tman"),fc).checkFile();
+					new TaskManInitFileChecker(new FileReader("src/gui/input.tman"),fc).checkFile();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
@@ -410,7 +410,7 @@ public class MainUI extends JFrame {
 					tData.setDependencyTasks(list_task_dependencies.getSelectedValuesList());
 					try {
 						fc.createTask(tData);
-					} catch (InvalidTaskDataException e1) {
+					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
                                 JOptionPane.ERROR_MESSAGE);
 					}
@@ -427,7 +427,7 @@ public class MainUI extends JFrame {
 		btnUpdateTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(taskList.getSelectedValue() != null){
-					TaskUpdateData tUData = fc.getTaskUpdateData(taskList.getSelectedValue());
+					TaskUpdateData tUData = fc.getTaskUpdateData(taskList.getSelectedValue(),projectList.getSelectedValue());
 					try {
 						LocalDateTime startTime = LocalDateTime.parse(textField_start.getText(), formatter);
 						tUData.setStartTime(startTime);
@@ -440,7 +440,7 @@ public class MainUI extends JFrame {
 					tUData.setStatus((Status) comboBox_status.getSelectedItem());
 					try {
 						fc.taskStatusUpdate(tUData);
-					} catch (InvalidTaskUpdateDataException e1) {
+					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
                                 JOptionPane.ERROR_MESSAGE);
 					}

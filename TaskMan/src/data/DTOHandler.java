@@ -13,8 +13,8 @@ public class DTOHandler {
 		return new TaskData(project);
 	}
 
-	public TaskUpdateData getTaskUpdateData(Task task) {
-		return new TaskUpdateData(task);
+	public TaskUpdateData getTaskUpdateData(Task task,Project project) {
+		return new TaskUpdateData(task,project);
 	}
 
 }

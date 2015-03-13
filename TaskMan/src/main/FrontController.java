@@ -55,18 +55,19 @@ public class FrontController {
 	/**
 	 * Create a new Task with the given TaskData.
 	 * @param tData the TaskData to create a new Task.
-	 * @throws InvalidTaskDataException thrown when the given TaskData is not valid.
+	 * @throws Exception 
+	 * @throws NullPointerException 
 	 */
-	public void createTask(TaskData tData) throws InvalidTaskDataException {
+	public void createTask(TaskData tData) throws NullPointerException, Exception {
 		taskMan.createTask(tData);
 	}
 	
 	/**
 	 * Update the Status of a Task with the data specified in the TaskUpdateData.
 	 * @param tUData the TaskUpdateData with which an update is to be made.
-	 * @throws InvalidTaskUpdateDataException thrown when the given TaskUpdateData is not valid.
+	 * @throws Exception 
 	 */
-	public void taskStatusUpdate(TaskUpdateData tUData) throws InvalidTaskUpdateDataException {
+	public void taskStatusUpdate(TaskUpdateData tUData) throws Exception {
 		taskMan.taskStatusUpdate(tUData);
 	}
 	
@@ -87,8 +88,8 @@ public class FrontController {
 		return dataHandler.getTaskData(project);
 	}
 	
-	public TaskUpdateData getTaskUpdateData(Task task){
-		return dataHandler.getTaskUpdateData(task);
+	public TaskUpdateData getTaskUpdateData(Task task, Project project){
+		return dataHandler.getTaskUpdateData(task,project);
 	}
 	
 	public List<User> getUsers() {
