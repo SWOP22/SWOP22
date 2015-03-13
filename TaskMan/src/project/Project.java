@@ -61,7 +61,15 @@ public class Project implements TimeObserver {
 		this.status = new Ongoing();
 		this.allTasks = null;
 	}
-
+	
+	/**
+	 * Returns a string representation of the project.
+	 */
+	public String toString(){
+		//TODO add time info depending on status/delay
+		return "Project " + name + ": " + status.getStatus();
+	}
+	
 	/**
 	 * Returns the project ID.
 	 * @return 
@@ -221,7 +229,7 @@ public class Project implements TimeObserver {
 	 * 				the ID of a task in an int.
 	 */
 	public int getTaskID() {
-		return allTasks.size() - 1;
+		return allTasks.size();
 	}
 	
 	/**
@@ -321,7 +329,7 @@ public class Project implements TimeObserver {
 	 * 				throws an InvalidProjectDataException if the given due date is not correct.
 	 */
 	public void checkBothDates(LocalDateTime creationTime, LocalDateTime dueTime) throws InvalidProjectDataException {
-		if(creationTime.compareTo(dueTime) < 0)
+		if(creationTime.isAfter(dueTime))
 			throw new InvalidProjectDataException("The due date cannot be before the creation date.");
 	}
 	

@@ -7,15 +7,18 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import main.FrontController;
+import main.TaskManInitFileChecker;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.FileReader;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
@@ -37,10 +40,8 @@ import task.Ongoing;
 import task.Status;
 import task.Task;
 import time.InvalidTimeStampException;
-import time.TimeStamp;
 import user.User;
 
-import javax.swing.JMenuItem;
 import javax.swing.JComboBox;
 
 public class MainUI extends JFrame {
@@ -51,7 +52,8 @@ public class MainUI extends JFrame {
 	private static final long serialVersionUID = 6669589071809532758L;
 	private JPanel contentPane;
 	
-	private FrontController fc;
+	private DateTimeFormatter formatter;
+	private static FrontController fc;
 	private JButton btnShowProjects;
 	private JButton btnCreateProject;
 	private JButton btnCreateTask;
@@ -89,18 +91,22 @@ public class MainUI extends JFrame {
 			public void run() {
 				try {
 					MainUI frame = new MainUI();
+					new TaskManInitFileChecker(new FileReader("/TaskMan/src/gui/input.tman"),fc).checkFile();
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 	}
 
 	/**
-	 * Create the frame.
+	 * Create the main user interface.
+	 * Initialize required elements.
 	 */
 	public MainUI() {
+		formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		setupFrames();
 		createEvents();
 		try {
@@ -121,6 +127,9 @@ public class MainUI extends JFrame {
 		}
 	}
 	
+	/**
+	 * Setup the user interface frames.
+	 */
 	public void setupFrames() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 800, 550);
@@ -144,10 +153,10 @@ public class MainUI extends JFrame {
 		scrollPane.setBounds(150, 30, 300, 190);
 		
 		JLabel lblProjects = new JLabel("Projects");
-		lblProjects.setBounds(150, 5, 39, 14);
+		lblProjects.setBounds(150, 5, 70, 14);
 		
 		JLabel lblTasks = new JLabel("Tasks");
-		lblTasks.setBounds(475, 5, 27, 14);
+		lblTasks.setBounds(475, 5, 59, 14);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(475, 30, 300, 190);
@@ -266,7 +275,7 @@ public class MainUI extends JFrame {
 		contentPane.add(comboBox_status);
 		
 		JLabel lblDependencies = new JLabel("dependencies");
-		lblDependencies.setBounds(520, 352, 70, 14);
+		lblDependencies.setBounds(512, 352, 78, 14);
 		contentPane.add(lblDependencies);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
@@ -315,7 +324,14 @@ public class MainUI extends JFrame {
 		
 	}
 	
+	/**
+	 * Create interaction events.
+	 */
 	public void createEvents() {
+		
+		/**
+		 * Show all the projects in the system.
+		 */
 		btnShowProjects.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				projectListModel.clear();
@@ -327,6 +343,9 @@ public class MainUI extends JFrame {
 			}
 		});
 		
+		/**
+		 * Show all the tasks of the selected project.
+		 */
 		btnShowTasks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				taskListModel.clear();
@@ -340,6 +359,9 @@ public class MainUI extends JFrame {
 			}
 		});
 		
+		/**
+		 * Show the details of the selected task in a seperate window.
+		 */
 		btnShowTaskDetails.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Task task = taskList.getSelectedValue();
@@ -347,26 +369,35 @@ public class MainUI extends JFrame {
 			}
 		});
 		
+		/**
+		 * Create a new project with the entered information.
+		 */
 		btnCreateProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ProjectData pData = fc.getProjectData();
 				pData.setName(textField_project_name.getText());
 				pData.setDescription(textField_project_description.getText());
-				//Has to be initialized
-				LocalDateTime creationTime = null;
-				pData.setCreationTime(creationTime);
-				//Has to be initialized
-				LocalDateTime dueTime = null;
-				pData.setDueTime(dueTime);
+				try {
+					LocalDateTime creationTime = LocalDateTime.parse(textField_project_start.getText(), formatter);
+					pData.setCreationTime(creationTime);
+					LocalDateTime dueTime = LocalDateTime.parse(textField_project_due.getText(), formatter);
+					pData.setDueTime(dueTime);
+				} catch (DateTimeParseException de){ 
+					JOptionPane.showMessageDialog(null, de.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+				}
 				try {
 					fc.createProject(pData);
 				} catch (InvalidProjectDataException e1) {
-					JOptionPane.showMessageDialog(null, e.toString(), "Error",
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 		
+		/**
+		 * Create a new task with the entered information.
+		 */
 		btnCreateTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(projectList.getSelectedValue() != null){
@@ -380,7 +411,7 @@ public class MainUI extends JFrame {
 					try {
 						fc.createTask(tData);
 					} catch (InvalidTaskDataException e1) {
-						JOptionPane.showMessageDialog(null, e.toString(), "Error",
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
                                 JOptionPane.ERROR_MESSAGE);
 					}
 				} else {
@@ -390,21 +421,27 @@ public class MainUI extends JFrame {
 			}
 		});
 		
+		/**
+		 * Update a task with the entered information.
+		 */
 		btnUpdateTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(taskList.getSelectedValue() != null){
 					TaskUpdateData tUData = fc.getTaskUpdateData(taskList.getSelectedValue());
-					//Has to be initialized
-					LocalDateTime startTime = null;
-					tUData.setStartTime(startTime);
-					//Has to be initialized
-					LocalDateTime endTime = null;
-					tUData.setEndTime(endTime);
+					try {
+						LocalDateTime startTime = LocalDateTime.parse(textField_start.getText(), formatter);
+						tUData.setStartTime(startTime);
+						LocalDateTime endTime = LocalDateTime.parse(textField_end.getText(), formatter);
+						tUData.setEndTime(endTime);
+					} catch (DateTimeParseException de) {
+						JOptionPane.showMessageDialog(null, de.getMessage(), "Error",
+	                            JOptionPane.ERROR_MESSAGE);
+					}
 					tUData.setStatus((Status) comboBox_status.getSelectedItem());
 					try {
 						fc.taskStatusUpdate(tUData);
 					} catch (InvalidTaskUpdateDataException e1) {
-						JOptionPane.showMessageDialog(null, e.toString(), "Error",
+						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
                                 JOptionPane.ERROR_MESSAGE);
 					}
 				} else {
@@ -414,14 +451,22 @@ public class MainUI extends JFrame {
 			}
 		});
 		
+		/**
+		 * Advance the time of the system to the entered time.
+		 */
 		btnAdvanceTime.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Has to be initialized
 				LocalDateTime time = null;
+				try {
+					time = LocalDateTime.parse(textField_date.getText(), formatter);
+				} catch (DateTimeParseException de) {
+					JOptionPane.showMessageDialog(null, de.getMessage(), "Error",
+                            JOptionPane.ERROR_MESSAGE);
+				}
 				try {
 					fc.advanceTime(time);
 				} catch (InvalidTimeStampException e1) {
-					JOptionPane.showMessageDialog(null, e.toString(), "Error",
+					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
 				}
 			}
