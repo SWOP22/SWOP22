@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import user.User;
+
 public class UserTest {
 
     @Test

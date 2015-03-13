@@ -1,4 +1,4 @@
-package task;
+package user;
 
 /**
  * Represents users who can perform tasks

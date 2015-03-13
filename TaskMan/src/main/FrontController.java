@@ -13,6 +13,7 @@ import exceptions.InvalidTaskUpdateDataException;
 import project.Project;
 import task.Task;
 import time.InvalidTimeStampException;
+import user.User;
 
 /**
  * The FrontController is a FacadeController for the TaskManager system.
@@ -27,9 +28,10 @@ public class FrontController {
 	
 	/**
 	 * Create a new FrontController for the system.
+	 * @throws Exception 
 	 */
-	public FrontController(){
-		taskMan = new TaskManager();
+	public FrontController(LocalDateTime currentTime) throws Exception{
+		taskMan = new TaskManager(currentTime);
 		dataHandler = new DTOHandler();
 	}
 	
@@ -87,5 +89,9 @@ public class FrontController {
 	
 	public TaskUpdateData getTaskUpdateData(Task task){
 		return dataHandler.getTaskUpdateData(task);
+	}
+	
+	public List<User> getUsers() {
+	    return taskMan.getUsers();
 	}
 }

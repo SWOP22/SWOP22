@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import user.User;
 import data.TaskData;
 import data.TaskUpdateData;
 

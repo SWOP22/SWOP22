@@ -14,6 +14,6 @@ public class InvalidProjectDataException extends Exception {
 	}
 	
 	public String getMessage(){
-		return "The information in the ProjectData object is not valid";
+		return message;
 	}
 }

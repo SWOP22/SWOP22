@@ -16,8 +16,14 @@ public class SystemTime extends TimeSubject {
 	return currentTime;
     }
     
-    public void advanceTime(long minutes) {
-	currentTime.plusMinutes(minutes);
+    public void advanceTime(LocalDateTime newTime) throws InvalidTimeStampException {
+	if (newTime == null) {
+	    throw new InvalidTimeStampException();
+	}
+	if (newTime.isBefore(currentTime)) {
+	    throw new InvalidTimeStampException();
+	}
+	currentTime = newTime;
 	notifyTimeObservers(currentTime);
     }
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import project.Project;
 import task.Task;
-import task.User;
+import user.User;
 
 public class TaskData {
     // the the project that will own this task

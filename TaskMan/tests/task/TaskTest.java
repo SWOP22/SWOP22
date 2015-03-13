@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import user.User;
 import data.TaskData;
 import data.TaskUpdateData;
 

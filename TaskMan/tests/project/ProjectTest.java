@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import data.ProjectData;
 import task.Task;
-import task.User;
+import user.User;
 
 public class ProjectTest {
 

@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
@@ -30,11 +31,14 @@ import data.ProjectData;
 import data.TaskData;
 import data.TaskUpdateData;
 import project.Project;
+import task.Failed;
+import task.Finished;
+import task.Ongoing;
 import task.Status;
 import task.Task;
-import task.User;
 import time.InvalidTimeStampException;
 import time.TimeStamp;
+import user.User;
 
 import javax.swing.JMenuItem;
 import javax.swing.JComboBox;
@@ -99,11 +103,20 @@ public class MainUI extends JFrame {
 	public MainUI() {
 		setupFrames();
 		createEvents();
-		fc = new FrontController();
-		for(Status status : fc.getAllStatus()){
+		try {
+		    // System time has to be initialized when starting the system
+		    fc = new FrontController(LocalDateTime.of(2014, 1, 1, 8, 0));
+		} catch (Exception e) {
+		    System.out.println("Could not initialize the front controller!");
+		}
+		ArrayList<Status> statuses = new ArrayList<Status>();
+		statuses.add(new Ongoing());
+		statuses.add(new Finished());
+		statuses.add(new Failed());
+		for(Status status : statuses){
 			statusListModel.addElement(status);
 		}
-		for(User user : fc.getAllUsers()){
+		for(User user : fc.getUsers()){
 			userListModel.addElement(user);
 		}
 	}
@@ -237,14 +250,17 @@ public class MainUI extends JFrame {
 		lblAlternate.setBounds(340, 374, 59, 14);
 		contentPane.add(lblAlternate);
 		
+		userListModel = new DefaultComboBoxModel<User>();
 		comboBox_task_user = new JComboBox<User>(userListModel);
 		comboBox_task_user.setBounds(409, 346, 93, 20);
 		contentPane.add(comboBox_task_user);
 		
+		taskListModel_alternate = new DefaultComboBoxModel<Task>();
 		comboBox_task_alternate = new JComboBox<Task>(taskListModel_alternate);
 		comboBox_task_alternate.setBounds(409, 371, 93, 20);
 		contentPane.add(comboBox_task_alternate);
 		
+		statusListModel = new DefaultComboBoxModel<Status>();
 		comboBox_status = new JComboBox<Status>(statusListModel);
 		comboBox_status.setBounds(409, 401, 93, 20);
 		contentPane.add(comboBox_status);
@@ -357,9 +373,9 @@ public class MainUI extends JFrame {
 					TaskData tData = fc.getTaskData(projectList.getSelectedValue());
 					tData.setDescription(textField_task_description.getText());
 					tData.setEstimatedDuration(Integer.parseInt(textField_task_duration.getText()));
-					tData.setAcceptableDeviation(Double.parseDouble(textField_task_deviation.getText()));
+					tData.setAcceptableDeviation(Integer.parseInt(textField_task_deviation.getText()));
 					tData.setUser((User) comboBox_task_user.getSelectedItem());
-					tData.setAlternateTask((Task) comboBox_task_alternate.getSelectedItem()); 
+					tData.setAlternateFor((Task) comboBox_task_alternate.getSelectedItem()); 
 					tData.setDependencyTasks(list_task_dependencies.getSelectedValuesList());
 					try {
 						fc.createTask(tData);
