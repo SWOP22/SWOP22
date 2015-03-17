@@ -360,8 +360,13 @@ public class Project implements TimeObserver {
 				else
 					end = task.getEstimatedEndTime();
 				
-				if(end.compareTo(maxEnd) > 0)
+				if(maxEnd != null) {
+					if(end.compareTo(maxEnd) > 0)
+						maxEnd = end;
+				}
+				else {
 					maxEnd = end;
+				}
 			}
 			else {
 				totalEstimatedDuration += task.getEstimatedDuration();
