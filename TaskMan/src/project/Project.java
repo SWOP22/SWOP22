@@ -428,18 +428,18 @@ public class Project implements TimeObserver {
 	public boolean checkAlternativeStatus(Task task) {
 		boolean isFinished = true;
 		
-		if (task.getAlternateFor() != null) {
-			Task alternateTask = task.getAlternateFor();
-			
-			if (alternateTask.ongoing()) {
+		for(Task alternateTask : allTasks) {
+			if(alternateTask == task.getAlternateFor()) {
+				if (alternateTask.ongoing()) {
+					isFinished = false;
+				}
+				else if (alternateTask.failed()) {
+					isFinished = checkAlternativeStatus(alternateTask);
+				}
+			}
+			else {
 				isFinished = false;
 			}
-			else if (alternateTask.failed()) {
-				isFinished = checkAlternativeStatus(alternateTask);
-			}
-		}
-		else {
-			isFinished = false;
 		}
 		
 		return isFinished;
