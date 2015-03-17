@@ -34,11 +34,14 @@ public class TaskManager {
     }
 
     public void createProject(ProjectData pData) throws InvalidProjectDataException {
+	if (pData.getCreationTime().isBefore(systemTime.getCurrentTime())) {
+	    throw new InvalidProjectDataException("Can not create projects in the past!");
+	}
 	pH.createProject(pData);
     }
 
     public void createTask(TaskData tData) throws NullPointerException, Exception {
-    pH.createTask(tData);
+	pH.createTask(tData);
     }
 
     public void taskStatusUpdate(TaskUpdateData tUData) throws Exception {
@@ -51,16 +54,16 @@ public class TaskManager {
 
     public List<User> getUsers() {
 	return userManager.getUsers();
-	
+
     }
 
     public void addUser(User user) throws Exception {
 	userManager.addUser(user);
-	
+
     }
 
-	public LocalDateTime getTime() {
-		return systemTime.getCurrentTime();
-	}
+    public LocalDateTime getTime() {
+	return systemTime.getCurrentTime();
+    }
 
 }
