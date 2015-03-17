@@ -442,7 +442,7 @@ public class Project implements TimeObserver {
 		boolean isFinished = true;
 		
 		for(Task alternateTask : allTasks) {
-			if(task.getAlternateFor() == alternateTask) {
+			if(alternateTask.getAlternateFor() == task) {
 				if (alternateTask.ongoing()) {
 					isFinished = false;
 				}
