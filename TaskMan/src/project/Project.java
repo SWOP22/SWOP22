@@ -386,7 +386,12 @@ public class Project implements TimeObserver {
 			}
 		}
 		
-		totalTasksTime = maxEnd;
+		if(maxEnd == null) {
+			totalTasksTime = creationTime;
+		}
+		else {
+			totalTasksTime = maxEnd;
+		}
 		
 		if(totalEstimatedDuration != 0) 
 			totalTasksTime = getEndDate(maxEnd, totalEstimatedDuration);
