@@ -8,7 +8,6 @@ import java.util.List;
 import task.Ongoing;
 import task.Status;
 import task.Task;
-import time.TimeObserver;
 import time.WorkTime;
 import data.ProjectData;
 import data.TaskData;
@@ -28,7 +27,7 @@ import exceptions.InvalidProjectDataException;
  * @author SWOP22
  *
  */
-public class Project implements TimeObserver {
+public class Project {
 	
 	private int ID;
 	private String name;
@@ -253,7 +252,12 @@ public class Project implements TimeObserver {
 			}
 			
 			if(isTaskOfProject) {
-				tUData.getTask().updateTask(tUData);
+				if(tUData.getStartTime().compareTo(creationTime) < 0) {
+					tUData.getTask().updateTask(tUData);
+				}
+				else {
+					throw new Exception("Can't set a task start time inferior to the project start time.");
+				}
 			}
 			else {
 				throw new Exception("Can't update a task of another project.");
@@ -487,13 +491,5 @@ public class Project implements TimeObserver {
     	}
     	
     	return response;
-    }
-    
-    /**
-     * Updates the project whenever the TimeStamp is changed.
-     */
-    @Override
-    public void update(LocalDateTime currentTime) {
-    	checkDelay();
     }
 }

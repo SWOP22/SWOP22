@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * This class has the responsibility to store the current time. It ensures that the current time is
  * not null and that it can never be advanced to a time in the past.
  */
-public class SystemTime extends TimeSubject {
+public class SystemTime {
     LocalDateTime currentTime;
 
     /**
@@ -46,6 +46,5 @@ public class SystemTime extends TimeSubject {
 	    throw new InvalidTimeStampException();
 	}
 	currentTime = newTime;
-	notifyTimeObservers(currentTime);
     }
 }

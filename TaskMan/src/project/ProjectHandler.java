@@ -3,7 +3,6 @@ package project;
 import java.util.ArrayList;
 import java.util.List;
 
-import time.TimeSubject;
 import data.ProjectData;
 import data.TaskData;
 import data.TaskUpdateData;
@@ -16,15 +15,10 @@ public class ProjectHandler {
 		allProjects = new ArrayList<Project>();
 	}
 	
-	public void createProject(ProjectData pData, TimeSubject timeSubject) throws InvalidProjectDataException {
+	public void createProject(ProjectData pData) throws InvalidProjectDataException {
 		checkExistingName(pData.getName());
 		Project project = new Project(getProjectID(), pData);
 		allProjects.add(project);
-		try {
-		    timeSubject.addTimeObserver(project);
-		} catch (Exception e) {
-		    throw new InvalidProjectDataException("Could not add project to list of time observers");
-		}
 	}
 	
 	public List<Project> getProjects() {

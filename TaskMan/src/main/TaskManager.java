@@ -34,7 +34,7 @@ public class TaskManager {
     }
 
     public void createProject(ProjectData pData) throws InvalidProjectDataException {
-	pH.createProject(pData, systemTime);
+	pH.createProject(pData);
     }
 
     public void createTask(TaskData tData) throws NullPointerException, Exception {

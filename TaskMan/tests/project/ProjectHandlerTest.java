@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import time.TimeSubject;
 import data.ProjectData;
 
 public class ProjectHandlerTest {
@@ -18,7 +17,6 @@ public class ProjectHandlerTest {
 	public void test() {
 		ProjectHandler pHandler = new ProjectHandler();
 		ProjectData pData = null;
-		TimeSubject timeSubject = null;
 		
 		pData.setName("test name");
 		pData.setDescription("test description");
