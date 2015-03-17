@@ -386,10 +386,10 @@ public class Project implements TimeObserver {
 			}
 		}
 		
-		if(totalEstimatedDuration != 0)
+		totalTasksTime = maxEnd;
+		
+		if(totalEstimatedDuration != 0) 
 			totalTasksTime = getEndDate(maxEnd, totalEstimatedDuration);
-		else 
-			totalTasksTime = maxEnd;
 		
 		if(totalTasksTime.compareTo(dueTime) > 0)
 			delay = dueTime.until( totalTasksTime, ChronoUnit.HOURS);
