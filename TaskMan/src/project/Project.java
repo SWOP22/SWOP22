@@ -440,6 +440,7 @@ public class Project implements TimeObserver {
 	 */
 	public boolean checkAlternativeStatus(Task task) {
 		boolean isFinished = true;
+		boolean alternateFound = false;
 		
 		for(Task alternateTask : allTasks) {
 			if(alternateTask.getAlternateFor() == task) {
@@ -449,10 +450,13 @@ public class Project implements TimeObserver {
 				else if (alternateTask.failed()) {
 					isFinished = checkAlternativeStatus(alternateTask);
 				}
+				
+				alternateFound = true;
 			}
-			else {
-				isFinished = false;
-			}
+		}
+		
+		if(!alternateFound) {
+			isFinished = false;
 		}
 		
 		return isFinished;
