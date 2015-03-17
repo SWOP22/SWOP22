@@ -59,4 +59,8 @@ public class TaskManager {
 	
     }
 
+	public LocalDateTime getTime() {
+		return systemTime.getCurrentTime();
+	}
+
 }

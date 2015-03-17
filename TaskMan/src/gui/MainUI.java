@@ -79,6 +79,7 @@ public class MainUI extends JFrame {
 	private JComboBox<Status> comboBox_status;
 	private JTextField textField_user;
 	private JButton btnAddUser;
+	private JLabel lblTime;
 	/**
 	 * Launch the application.
 	 */
@@ -129,6 +130,7 @@ public class MainUI extends JFrame {
 		for(User user : fc.getUsers()){
 			userListModel.addElement(user);
 		}
+		lblTime.setText( fc.getTime().toString());
 	}
 	
 	/**
@@ -337,6 +339,10 @@ public class MainUI extends JFrame {
 		contentPane.add(textField_user);
 		textField_user.setColumns(10);
 		
+		lblTime = new JLabel("current time");
+		lblTime.setBounds(664, 482, 111, 14);
+		contentPane.add(lblTime);
+		
 	}
 	
 	/**
@@ -366,6 +372,7 @@ public class MainUI extends JFrame {
 				taskListModel.clear();
 				Project project = projectList.getSelectedValue();
 				int i = 0;
+				taskListModel_dependencies.clear();
 				for(Task task : project.getAllTasks()){
 					taskListModel.add(i,task);
 					taskListModel_dependencies.add(i, task);
@@ -474,6 +481,7 @@ public class MainUI extends JFrame {
 				LocalDateTime time = null;
 				try {
 					time = LocalDateTime.parse(textField_date.getText(), formatter);
+					lblTime.setText(fc.getTime().toString());
 				} catch (DateTimeParseException de) {
 					JOptionPane.showMessageDialog(null, de.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);

@@ -97,4 +97,8 @@ public class FrontController {
 	public void addUser(User user) throws Exception {
 	    taskMan.addUser(user);
 	}
+
+	public LocalDateTime getTime() {
+		return taskMan.getTime();
+	}
 }
