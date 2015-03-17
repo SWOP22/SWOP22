@@ -439,27 +439,20 @@ public class Project implements TimeObserver {
 	 * 				returns the value of isFinished. The value will be set to false if the task is not finished.
 	 */
 	public boolean checkAlternativeStatus(Task task) {
-		boolean isFinished = true;
-		boolean alternateFound = false;
+		boolean alternateFinished = false;
 		
 		for(Task alternateTask : allTasks) {
 			if(alternateTask.getAlternateFor() == task) {
-				if (alternateTask.ongoing()) {
-					isFinished = false;
+				if (alternateTask.finished()) {
+				    alternateFinished = true;
 				}
 				else if (alternateTask.failed()) {
-					isFinished = checkAlternativeStatus(alternateTask);
+				    alternateFinished = checkAlternativeStatus(alternateTask);
 				}
-				
-				alternateFound = true;
 			}
 		}
 		
-		if(!alternateFound) {
-			isFinished = false;
-		}
-		
-		return isFinished;
+		return alternateFinished;
 	}
     
 	/**
