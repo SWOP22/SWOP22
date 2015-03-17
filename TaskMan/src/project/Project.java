@@ -244,7 +244,20 @@ public class Project implements TimeObserver {
 	 */
 	public void taskStatusUpdate(TaskUpdateData tUData) throws Exception {
 		if(tUData.getTask()!=null){
-			tUData.getTask().updateTask(tUData);
+			boolean isTaskOfProject = false;
+			
+			for(Task task : allTasks) {
+				if(tUData.getTask() == task) {
+					isTaskOfProject = true;
+				}
+			}
+			
+			if(isTaskOfProject) {
+				tUData.getTask().updateTask(tUData);
+			}
+			else {
+				throw new Exception("Can't update a task of another project.");
+			}
 		} else {
 			throw new Exception("Can't update a task that doesn't exist.");
 		}
