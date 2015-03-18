@@ -46,7 +46,7 @@ public class TaskDetailsUI extends JFrame {
 	}
 	
 	public void printDetails(Task task){
-		textArea.append(task.getDescription());
+		textArea.append(task.toString());
 		// TODO other details to show
 	}
 
