@@ -492,13 +492,13 @@ public class MainUI extends JFrame {
 				LocalDateTime time = null;
 				try {
 					time = LocalDateTime.parse(textField_date.getText(), formatter);
-					lblTime.setText(fc.getTime().toString());
 				} catch (DateTimeParseException de) {
 					JOptionPane.showMessageDialog(null, de.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
 				}
 				try {
 					fc.advanceTime(time);
+					lblTime.setText(fc.getTime().toString());
 				} catch (InvalidTimeStampException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
