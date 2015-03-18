@@ -40,7 +40,11 @@ public class TaskManager {
 	pH.createProject(pData);
     }
 
-    public void createTask(TaskData tData) throws NullPointerException, Exception {
+    public void createTask(TaskData tData) throws Exception {
+	/*Commented for now because it causes errors upon start up, but should be uncommented in the future
+	 * if (tData.getUser() != userManager.getUser(tData.getUser().getName())) {
+	    throw new Exception("Could not create the task because the given user does not exist in the system!");
+	}*/
 	pH.createTask(tData);
     }
 
