@@ -276,10 +276,10 @@ public class Project {
 				    throw new Exception("Can't set a task start time inferior to the project start time.");
 				}
 				else {
-					setFinishedStatus();
-					setDelay(checkDelay());
-					
 				    tUData.getTask().updateTask(tUData);
+				    
+				    setFinishedStatus();
+					setDelay(checkDelay());
 				}
 			}
 			else {
