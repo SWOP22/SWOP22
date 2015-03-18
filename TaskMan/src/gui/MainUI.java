@@ -369,14 +369,20 @@ public class MainUI extends JFrame {
 		 */
 		btnShowTasks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				taskListModel.clear();
 				Project project = projectList.getSelectedValue();
-				int i = 0;
-				taskListModel_dependencies.clear();
-				for(Task task : project.getAllTasks()){
-					taskListModel.add(i,task);
-					taskListModel_dependencies.add(i, task);
-					i++;
+				if(project != null){
+					taskListModel.clear();
+					
+					int i = 0;
+					taskListModel_dependencies.clear();
+					for(Task task : project.getAllTasks()){
+						taskListModel.add(i,task);
+						taskListModel_dependencies.add(i, task);
+						i++;
+					} 
+				} else {
+					JOptionPane.showMessageDialog(null, "Select a project", "Error",
+                            JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -387,7 +393,12 @@ public class MainUI extends JFrame {
 		btnShowTaskDetails.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Task task = taskList.getSelectedValue();
-				new TaskDetailsUI(task);
+				if(task != null){
+					new TaskDetailsUI(task);
+				} else {
+					JOptionPane.showMessageDialog(null, "Select a task", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		
