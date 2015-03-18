@@ -415,13 +415,8 @@ public class MainUI extends JFrame {
 					pData.setCreationTime(creationTime);
 					LocalDateTime dueTime = LocalDateTime.parse(textField_project_due.getText(), formatter);
 					pData.setDueTime(dueTime);
-				} catch (DateTimeParseException de){ 
-					JOptionPane.showMessageDialog(null, de.getMessage(), "Error",
-                            JOptionPane.ERROR_MESSAGE);
-				}
-				try {
 					fc.createProject(pData);
-				} catch (InvalidProjectDataException e1) {
+				} catch (Exception e1){ 
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
                             JOptionPane.ERROR_MESSAGE);
 				}
@@ -434,14 +429,14 @@ public class MainUI extends JFrame {
 		btnCreateTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if(projectList.getSelectedValue() != null){
-					TaskData tData = fc.getTaskData(projectList.getSelectedValue());
-					tData.setDescription(textField_task_description.getText());
-					tData.setEstimatedDuration(Integer.parseInt(textField_task_duration.getText()));
-					tData.setAcceptableDeviation(Integer.parseInt(textField_task_deviation.getText()));
-					tData.setUser((User) comboBox_task_user.getSelectedItem());
-					tData.setAlternateFor((Task) comboBox_task_alternate.getSelectedItem()); 
-					tData.setDependencyTasks(list_task_dependencies.getSelectedValuesList());
 					try {
+						TaskData tData = fc.getTaskData(projectList.getSelectedValue());
+						tData.setDescription(textField_task_description.getText());
+						tData.setEstimatedDuration(Integer.parseInt(textField_task_duration.getText()));
+						tData.setAcceptableDeviation(Integer.parseInt(textField_task_deviation.getText()));
+						tData.setUser((User) comboBox_task_user.getSelectedItem());
+						tData.setAlternateFor((Task) comboBox_task_alternate.getSelectedItem()); 
+						tData.setDependencyTasks(list_task_dependencies.getSelectedValuesList());
 						fc.createTask(tData);
 					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error",
