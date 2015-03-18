@@ -36,6 +36,7 @@ public class Project {
 	private LocalDateTime dueTime;
 	private Status status;
 	private List<Task> allTasks;
+	private long delay;
 	
 	/**
 	 * Constructs a Project with an ID and ProjectData.
@@ -62,6 +63,7 @@ public class Project {
 		setDueTime(pDueTime);
 		this.status = new Ongoing();
 		this.allTasks = new ArrayList<Task>();
+		this.setDelay(0);
 	}
 	
 	/**
@@ -193,6 +195,24 @@ public class Project {
 	}
 	
 	/**
+	 * Returns the delay of the project.
+	 * @return
+	 * 				a long with the delay of the project in minutes.
+	 */
+	public long getDelay() {
+		return delay;
+	}
+
+	/**
+	 * Sets the delay of the project.
+	 * @param delay
+	 * 				a long with the delay of the project in minutes.
+	 */
+	public void setDelay(long delay) {
+		this.delay = delay;
+	}
+	
+	/**
 	 * Returns the ongoing status for the project.
 	 * @return
 	 * 				the ongoing status of the project in a boolean.
@@ -256,6 +276,9 @@ public class Project {
 				    throw new Exception("Can't set a task start time inferior to the project start time.");
 				}
 				else {
+					setFinishedStatus();
+					setDelay(checkDelay());
+					
 				    tUData.getTask().updateTask(tUData);
 				}
 			}
