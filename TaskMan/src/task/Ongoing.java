@@ -21,11 +21,7 @@ public class Ongoing implements Status {
     }
 
     @Override
-    public String getStatus() {
+    public String toString() {
 	return "ongoing";
-    }
-    
-    public String toString(){
-    	return getStatus();
     }
 }

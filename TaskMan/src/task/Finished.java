@@ -20,11 +20,7 @@ public class Finished implements Status {
     }
 
     @Override
-    public String getStatus() {
+    public String toString() {
 	return "finished";
-    }
-    
-    public String toString(){
-    	return getStatus();
     }
 }

@@ -376,7 +376,7 @@ public class Task {
      *         task
      */
     public String getStatus() {
-	return status.getStatus();
+	return status.toString();
     }
 
     /**

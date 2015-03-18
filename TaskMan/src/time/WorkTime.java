@@ -23,20 +23,24 @@ public class WorkTime {
 	LocalDateTime estimatedEndTime = startTime;
 
 	for (int i = 0; i < estimatedDuration; i++) {
-	    if (estimatedEndTime.getDayOfWeek().name().toUpperCase() == "SATURDAY"
+	    if ((estimatedEndTime.getDayOfWeek().name().toUpperCase() == "FRIDAY" && estimatedEndTime
+		    .getHour() > (endHour - 1))
+		    || estimatedEndTime.getDayOfWeek().name().toUpperCase() == "SATURDAY"
 		    || estimatedEndTime.getDayOfWeek().name().toUpperCase() == "SUNDAY") {
-		while (!(estimatedEndTime.getDayOfWeek().name().toUpperCase() == "MONDAY" && estimatedEndTime
-			.getHour() == startHour)) {
+		while (estimatedEndTime.getDayOfWeek().name().toUpperCase() != "MONDAY") {
 		    estimatedEndTime = estimatedEndTime.plusDays(1);
-		    estimatedEndTime = estimatedEndTime.withHour(startHour);
 		}
+		estimatedEndTime = estimatedEndTime.withHour(startHour);
+		estimatedEndTime = estimatedEndTime.withMinute(0);
 	    }
 	    if (estimatedEndTime.getHour() < startHour) {
 		estimatedEndTime = estimatedEndTime.withHour(startHour);
+		estimatedEndTime = estimatedEndTime.withMinute(0);
 	    }
 	    if (estimatedEndTime.getHour() > (endHour - 1)) {
 		estimatedEndTime = estimatedEndTime.plusDays(1);
 		estimatedEndTime = estimatedEndTime.withHour(startHour);
+		estimatedEndTime = estimatedEndTime.withMinute(0);
 	    }
 	    estimatedEndTime = estimatedEndTime.plusMinutes(1);
 	}

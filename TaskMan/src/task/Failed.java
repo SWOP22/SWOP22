@@ -20,11 +20,7 @@ public class Failed implements Status {
     }
 
     @Override
-    public String getStatus() {
+    public String toString() {
 	return "failed";
-    }
-    
-    public String toString(){
-    	return getStatus();
     }
 }

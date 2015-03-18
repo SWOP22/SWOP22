@@ -12,19 +12,19 @@ public class StatusTest {
 	assertEquals(true, status.ongoing());
 	assertEquals(false, status.finished());
 	assertEquals(false, status.failed());
-	assertEquals("ongoing", status.getStatus());
+	assertEquals("ongoing", status.toString());
 	
 	status = new Finished();
 	assertEquals(false, status.ongoing());
 	assertEquals(true, status.finished());
 	assertEquals(false, status.failed());
-	assertEquals("finished", status.getStatus());
+	assertEquals("finished", status.toString());
 	
 	status = new Failed();
 	assertEquals(false, status.ongoing());
 	assertEquals(false, status.finished());
 	assertEquals(true, status.failed());
-	assertEquals("failed", status.getStatus());
+	assertEquals("failed", status.toString());
     }
 
 }

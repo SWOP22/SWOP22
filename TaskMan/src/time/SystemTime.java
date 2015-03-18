@@ -2,6 +2,8 @@ package time;
 
 import java.time.LocalDateTime;
 
+import exceptions.InvalidTimeStampException;
+
 /**
  * This class has the responsibility to store the current time. It ensures that the current time is
  * not null and that it can never be advanced to a time in the past.

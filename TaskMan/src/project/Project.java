@@ -69,7 +69,7 @@ public class Project {
 	 */
 	public String toString(){
 		//TODO add time info depending on status/delay
-		return "Project " + name + ": " + status.getStatus();
+		return "Project " + name + ": " + status.toString();
 	}
 	
 	/**
@@ -252,11 +252,11 @@ public class Project {
 			}
 			
 			if(isTaskOfProject) {
-				if(tUData.getStartTime().compareTo(creationTime) < 0) {
-					tUData.getTask().updateTask(tUData);
+				if(tUData.getStartTime().isBefore(creationTime)) {
+				    throw new Exception("Can't set a task start time inferior to the project start time.");
 				}
 				else {
-					throw new Exception("Can't set a task start time inferior to the project start time.");
+				    tUData.getTask().updateTask(tUData);
 				}
 			}
 			else {
