@@ -23,7 +23,7 @@ public class ProjectTest {
     public void testProjectConstructor() {
 	
     	Project project0 = null;
-    	ProjectData pData0 = null;
+    	ProjectData pData0 = new ProjectData();
     	List<Task> allTasks = new ArrayList<Task>();
     	
     	// Create a project with valid arguments
@@ -38,15 +38,19 @@ public class ProjectTest {
     		fail("Failed to create project with valid arguments!");
     	}
     	
+    	//Check if the system returns a toString for a Project
+    	try {
+    		project0.toString();
+    	}catch (Exception e) {
+    		fail("Cannot return a project.toString()!");
+    	}
+    	
     	// Check if the tasks are stored correctly, so that cannot edit the list directly
     	allTasks.add(null);
     	assertNotEquals(allTasks, project0.getAllTasks());
     	
     	// Check if status is correctly set
     	assertEquals("ongoing", project0.getStatus());
-    	
-    	// Check if all tasks are finished
-    	assertEquals(false, project0.checkFinished());
     	
     	
     	Task task0 = null;
@@ -59,130 +63,80 @@ public class ProjectTest {
     	    fail("Failed to create task with valid arguments!");
     	}
     	
+    	// Check if all tasks are finished
+    	assertEquals(false, project0.checkFinished());
+    	
+    	//Set task to finished
+    	try {
+    	    //task0.updateTask(updateData);
+    	} catch (Exception e) {
+    	    fail("Failed to set task status to finished!");
+    	}
+    	
     	// Check if the alternative of a status is finished
     	assertEquals(false, project0.checkAlternativeStatus(task0));
     	
     	// Check if a task is available
     	assertEquals(false, project0.checkTaskAvailability(task0));
     	
-    	// When creating invalid projects, an exception must be thrown, otherwise the test fails.
-		//Check if the constructor accepts a null ProjectData value
-    	try {
-    		project0 = new Project(0, null);
-    	} catch (NullPointerException nullPointerException) {
-    		fail("Project with null argument created!");
-    	} catch (Exception e) {
-    		fail("NullPointerException expected!");
-    	}
-    	
     	// Check invalid ID
 		try {
-			pData0.setName("test name");
-			pData0.setDescription("test description");
-			pData0.setCreationTime(LocalDateTime.now());
-			pData0.setDueTime(LocalDateTime.of(2016,03,12,16,59));
-		    
 			project0 = new Project(-1, pData0);
-		} catch (Exception e) {
+			
 			fail("Project with negative ID created!");
+		} catch (Exception e) {
 		}
 	
 		// Check empty description
 		try {
-			pData0.setName("test name");
 			pData0.setDescription("");
-			pData0.setCreationTime(LocalDateTime.now());
-			pData0.setDueTime(LocalDateTime.of(2016,03,12,16,59));
 		    
 			project0 = new Project(0, pData0);
-		} catch (Exception e) {
+			
 			fail("Project with empty description created!");
+		} catch (Exception e) {
 		}
 	
 		// Check null description
 		try {
-			pData0.setName("test name");
 			pData0.setDescription(null);
-			pData0.setCreationTime(LocalDateTime.now());
-			pData0.setDueTime(LocalDateTime.of(2016,03,12,16,59));
-		    
+			
 			project0 = new Project(0, pData0);
-		} catch (Exception e) {
+			
 			fail("Project without description created!");
+		} catch (Exception e) {
+			
 		}
 	
 		// Check null creation time
 		try {
-			pData0.setName("test name");
-			pData0.setDescription("test description");
 			pData0.setCreationTime(null);
-			pData0.setDueTime(LocalDateTime.of(2016,03,12,16,59));
 		    
 			project0 = new Project(0, pData0);
-		} catch (Exception e) {
+			
 			fail("Project without creation time created!");
+		} catch (Exception e) {
 		}
 		
 		// Check null due time
 			try {
-				pData0.setName("test name");
-				pData0.setDescription("test description");
-				pData0.setCreationTime(LocalDateTime.now());
 				pData0.setDueTime(null);
 				
 				project0 = new Project(0, pData0);
-			} catch (Exception e) {
+				
 				fail("Project without due time created!");
+			} catch (Exception e) {
 			}
 	
 		// Check creation time after due time
 		try {
-			pData0.setName("test name");
-			pData0.setDescription("test description");
 			pData0.setCreationTime(LocalDateTime.now());
 			pData0.setDueTime(LocalDateTime.of(2000,03,12,16,59));
 		    
 			project0 = new Project(0, pData0);
-		} catch (Exception e) {
+			
 			fail("Project created with a due time before the creation time!");
-		}
-		
-		
-		Project project1 = null;
-		ProjectData pData1 = null;
-		
-		//Check two projects with the same ID
-		try {
-			pData0.setName("test name");
-			pData0.setDescription("test description");
-			pData0.setCreationTime(LocalDateTime.now());
-			pData0.setDueTime(LocalDateTime.of(2016,03,12,16,59));
-		    project0 = new Project(0, pData0);
-		    
-			pData1.setName("test name 2");
-			pData1.setDescription("new test description");
-			pData1.setCreationTime(LocalDateTime.now());
-			pData1.setDueTime(LocalDateTime.of(2016,03,12,16,59));
-		    project1 = new Project(0, pData1);
 		} catch (Exception e) {
-			fail("Two projects cannot have the same name!");
-		}
-		
-		// Check two projects with same name
-		try {
-			pData0.setName("same name");
-			pData0.setDescription("test description");
-			pData0.setCreationTime(LocalDateTime.now());
-			pData0.setDueTime(LocalDateTime.of(2016,03,12,16,59));
-		    project0 = new Project(0, pData0);
-		    
-			pData1.setName("same name");
-			pData1.setDescription("new test description");
-			pData1.setCreationTime(LocalDateTime.now());
-			pData1.setDueTime(LocalDateTime.of(2016,03,12,16,59));
-		    project1 = new Project(1, pData1);
-		} catch (Exception e) {
-			fail("Two projects cannot have the same name!");
 		}
 	}
 	
@@ -193,7 +147,7 @@ public class ProjectTest {
 	@Test
 	public void testGettersSetters() {
 		Project project0 = null;
-		ProjectData pData0 = null;
+		ProjectData pData0 = new ProjectData();
 		
 		// Create a project with valid arguments
 		try {
@@ -258,7 +212,7 @@ public class ProjectTest {
 		}
 		
 		// Checks the getAllTasks for the tasks of a project
-		assertEquals(null, project0.getAllTasks());
+		assertEquals(true, project0.getAllTasks().isEmpty());
 		
 		// Checks the getTaskID for a task of a project
 		assertEquals(0, project0.getTaskID());
