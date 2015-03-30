@@ -272,10 +272,9 @@ public class Project {
 			}
 			
 			if(isTaskOfProject) {
-				if(tUData.getStartTime().isBefore(creationTime)) {
+				if(tUData.getStartTime() != null && tUData.getStartTime().isBefore(creationTime)) {
 				    throw new Exception("Can't set a task start time inferior to the project start time.");
-				}
-				else {
+				} else {
 				    tUData.getTask().updateTask(tUData);
 				    
 				    setFinishedStatus();
@@ -503,6 +502,10 @@ public class Project {
     		return false;
     	}
     	else {
+    		if(task.finished() || task.failed()) {
+    			response = false;
+    		}
+    		
     		for(Task dependencyTask : task.getDependencyTasks()) {
         		if(dependencyTask.ongoing()) {
         			response = false;

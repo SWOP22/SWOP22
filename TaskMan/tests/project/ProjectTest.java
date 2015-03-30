@@ -10,9 +10,14 @@ import java.util.List;
 
 import org.junit.Test;
 
+import task.Finished;
+import task.Ongoing;
+import task.Status;
 import task.Task;
 import user.User;
 import data.ProjectData;
+import data.TaskData;
+import data.TaskUpdateData;
 
 public class ProjectTest {
 
@@ -52,26 +57,79 @@ public class ProjectTest {
     	// Check if status is correctly set
     	assertEquals("ongoing", project0.getStatus());
     	
+    	//Create user with valid agruments
+    	User user = null;
     	
-    	Task task0 = null;
+    	try{
+    		user = new User("user");
+    	} catch (Exception e) {
+    	    fail("Failed to create user with valid arguments!");
+    	}
+    	
+    	
+    	TaskData tData = new TaskData(project0);
     	List<Task> dependencies = new ArrayList<Task>();
     			
-    	// Create a task with valid arguments
+    	// Create a task with valid arguments inside the project
     	try {
-    	    task0 = new Task(0, "test", new User("user"), 60, 5, dependencies, null);
+    	    tData.setDescription("taks description");
+    	    tData.setUser(user);
+    	    tData.setEstimatedDuration(500);
+    	    tData.setAcceptableDeviation(0);
+    	    tData.setDependencyTasks(dependencies);
+    	    tData.setAlternateFor(null);
+    	    
+    	    project0.createTask(tData);
     	} catch (Exception e) {
     	    fail("Failed to create task with valid arguments!");
     	}
     	
-    	// Check if all tasks are finished
-    	assertEquals(false, project0.checkFinished());
+    	Task task0 = null;
+    	
+    	//Get task from allTasks
+    	try {
+    		allTasks = project0.getAllTasks();
+    		task0 = allTasks.get(0);
+    	}catch (Exception e) {
+    	    fail("Failed to recover created task!");
+    	}
+    	
+    	// Check if a task is available
+    	assertEquals(true, project0.checkTaskAvailability(task0));
+    	
+    	// Check if all tasks are finished (false)
+    	assertNotEquals(true, project0.checkFinished());
+    	
+    	TaskUpdateData tUData0 = new TaskUpdateData(task0, project0);
+    	Status status0 = new Ongoing();
+    	
+    	//Set task to ongoing
+    	try {
+    		tUData0.setStatus(status0);
+    		tUData0.setEndTime(null);
+    		tUData0.setStartTime(LocalDateTime.now());
+    		
+    		project0.taskStatusUpdate(tUData0);
+    	} catch (Exception e) {
+    	    fail("Failed to set task status to ongoing!");
+    	}
+    	
+    	TaskUpdateData tUData1 = new TaskUpdateData(task0, project0);
+    	Status status1 = new Finished();
     	
     	//Set task to finished
     	try {
-    	    //task0.updateTask(updateData);
+    		tUData1.setStatus(status1);
+    		tUData1.setEndTime(LocalDateTime.now());
+    		tUData1.setStartTime(null);
+    		
+    	    project0.taskStatusUpdate(tUData1);
     	} catch (Exception e) {
     	    fail("Failed to set task status to finished!");
     	}
+    	
+    	// Check if all tasks are finished (true)
+    	assertEquals(true, project0.checkFinished());
     	
     	// Check if the alternative of a status is finished
     	assertEquals(false, project0.checkAlternativeStatus(task0));
